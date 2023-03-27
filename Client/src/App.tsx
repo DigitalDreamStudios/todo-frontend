@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
 
-import CardContainer from './Components/CardContainer/CardContainer'
+import TodoList from './Components/NoteList'
 
 function App() {
   return (
     <div className="App">
-      <CardContainer />
+      <TodoList />
     </div>
   )
 }
