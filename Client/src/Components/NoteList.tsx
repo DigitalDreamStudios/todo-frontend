@@ -81,16 +81,18 @@ const NoteList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>What's the Plan for Today?</h1>
-      <NoteForm onSubmit={addNote} />
-      <Note
-        todos={todos}
-        completeTodo={completeNote}
-        removeTodo={removeNote}
-        editTodo={editTodo}
-      />
-      <ToastContainer />
+    <div className='card-container'>
+      <div className='card'>
+        <h1>What's the Plan for Today?</h1>
+        <NoteForm onSubmit={addNote} />
+        <Note
+          todos={todos}
+          completeTodo={completeNote}
+          removeTodo={removeNote}
+          editTodo={editTodo}
+        />
+        <ToastContainer />
+      </div>
     </div>
   );
 };
