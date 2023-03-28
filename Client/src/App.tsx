@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import './App.css'
+import TodoContainer from './components/TodoContainer'
 
-import TodoList from './Components/NoteList'
+import './App.css'
+import './assets/css/reset.css'
 
 function App() {
   return (
     <div className="App">
-      <TodoList />
+      <TodoContainer />
     </div>
   )
 }

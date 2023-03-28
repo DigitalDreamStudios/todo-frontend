@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import NoteForm from './NoteForm';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
+
+// Import components
+import TodoForm from './TodoForm';
+
+// Import styles
+import '../assets/css/list.css'
 
 type Todo = {
     id: string;
@@ -9,14 +14,14 @@ type Todo = {
     isComplete: boolean;
 };
 
-type NoteProps = {
+type TodoProps = {
     todos: Todo[];
     completeTodo: (id: string) => void;
     removeTodo: (id: string) => void;
     editTodo: (id: string, text: string) => void;
 };
 
-const Todo: React.FC<NoteProps> = ({
+const TodoList: React.FC<TodoProps> = ({
     todos,
     completeTodo,
     removeTodo,
@@ -28,11 +33,11 @@ const Todo: React.FC<NoteProps> = ({
     });
     const [editedText, setEditedText] = useState<string>('');
 
-    const handleEditSubmit = (note: { id: string; text: string }) => {
-        if (!note.text.trim()) {
+    const handleEditSubmit = (Todo: { id: string; text: string }) => {
+        if (!Todo.text.trim()) {
             return;
         }
-        editTodo(note.id, note.text.trim());
+        editTodo(Todo.id, Todo.text.trim());
         setEdit({ id: '', text: '' });
     };
 
@@ -49,7 +54,7 @@ const Todo: React.FC<NoteProps> = ({
                     key={todo.id}
                 >
                     {edit.id === todo.id ? (
-                        <NoteForm
+                        <TodoForm
                             edit={todo}
                             onSubmit={handleEditSubmit}
                             onCancel={handleEditCancel}
@@ -79,4 +84,4 @@ const Todo: React.FC<NoteProps> = ({
     );
 };
 
-export default Todo;
+export default TodoList;

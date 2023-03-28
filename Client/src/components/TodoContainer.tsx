@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import NoteForm from './NoteForm';
-import Note from './Note';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import uuid from 'react-uuid';
+
+// Import components
+import TodoForm from './TodoForm';
+import TodoList from './TodoList';
+
+// Import styles
+import '../assets/css/card.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Todo {
   id: string;
@@ -11,7 +16,7 @@ interface Todo {
   isComplete: boolean;
 }
 
-const NoteList: React.FC = () => {
+const TodoContainer: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
@@ -21,35 +26,35 @@ const NoteList: React.FC = () => {
     }
   }, []);
 
-  const addNote = (todo: { id: string; text: string }) => {
+  const addTodo = (todo: { id: string; text: string }) => {
     if (!todo.text.trim()) {
-      toast.error('Please enter a valid note!');
+      toast.error('Please enter a valid Todo!');
       return;
     }
 
-    const newNote: Todo = {
+    const newTodo: Todo = {
       id: uuid(),
       text: todo.text.trim(),
       isComplete: false,
     };
 
-    setTodos([newNote, ...todos]);
+    setTodos([newTodo, ...todos]);
 
-    toast.success('Note added successfully!');
+    toast.success('Todo added successfully!');
 
     // Add to local storage
-    localStorage.setItem('todos', JSON.stringify([newNote, ...todos]));
+    localStorage.setItem('todos', JSON.stringify([newTodo, ...todos]));
   };
 
-  const removeNote = (id: string) => {
+  const removeTodo = (id: string) => {
     setTodos(prev => prev.filter(todo => todo.id !== id));
 
     // Remove from local storage
     localStorage.setItem('todos', JSON.stringify(todos.filter(todo => todo.id !== id)));
-    toast.success('Note removed successfully!');
+    toast.success('Todo removed successfully!');
   };
 
-  const completeNote = (id: string) => {
+  const completeTodo = (id: string) => {
     setTodos(prev =>
       prev.map(todo => {
         if (todo.id === id) {
@@ -70,7 +75,6 @@ const NoteList: React.FC = () => {
       })
     );
 
-
     // Edit in local storage
     localStorage.setItem('todos', JSON.stringify(todos.map(todo => {
       if (todo.id === id)
@@ -84,11 +88,11 @@ const NoteList: React.FC = () => {
     <div className='card-container'>
       <div className='card'>
         <h1>What's the Plan for Today?</h1>
-        <NoteForm onSubmit={addNote} />
-        <Note
+        <TodoForm onSubmit={addTodo} />
+        <TodoList
           todos={todos}
-          completeTodo={completeNote}
-          removeTodo={removeNote}
+          completeTodo={completeTodo}
+          removeTodo={removeTodo}
           editTodo={editTodo}
         />
         <ToastContainer />
@@ -97,4 +101,4 @@ const NoteList: React.FC = () => {
   );
 };
 
-export default NoteList;
+export default TodoContainer;
