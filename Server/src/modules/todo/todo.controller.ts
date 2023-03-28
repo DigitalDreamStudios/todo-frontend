@@ -1,6 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Res, Get, Patch, Query, Delete } from '@nestjs/common';
 import { CreateTodoDto } from './dto/todo.dto';
 import { TodoService } from './todo.service';
+import { notFound } from '../../common/utils/notFound';
 
 @Controller('api')
 export class TodoController {
@@ -11,7 +12,7 @@ export class TodoController {
         const todo = await this.todoService.createTodo(createTodoDto);
 
         return res.status(HttpStatus.OK).json({
-            message: 'Todo created successfully',
+            message: 'To do created successfully',
             todo: todo
         });
     }
@@ -41,7 +42,7 @@ export class TodoController {
         if (!todo) return notFound(res);
 
         return res.status(HttpStatus.OK).json({
-            message: 'Todo updated successfully',
+            message: 'To do updated successfully',
             todo: todo
         });
     }
@@ -53,14 +54,7 @@ export class TodoController {
         if (!todo) return notFound(res);
 
         return res.status(HttpStatus.OK).json({
-            message: 'Todo deleted successfully'
+            message: 'To do deleted successfully'
         });
     }
 }
-
-// Helper functions
-const notFound = (res: any) => {
-    return res.status(HttpStatus.NOT_FOUND).json({
-        message: 'Todo not found'
-    });
-};
