@@ -3,18 +3,3 @@ body {
             rgba(48, 16, 255, 1) 0%,
             rgba(100, 115, 255, 1) 100%);
 }
-
-@media screen and (max-width: 767px) {
-    .card-container {
-        width: 100%;
-    }
-
-}
-
-@media screen and (max-width: 480px) {
-    .card-container {
-        width: 100%;
-    }
-
-
-}
