@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import uuid from 'react-uuid';
 
-interface NoteFormProps {
+// Import styles
+import '../assets/css/form.css'
+
+interface TodoFormProps {
   edit?: { id: string; text: string };
-  onSubmit: (note: { id: string; text: string }) => void;
+  onSubmit: (Todo: { id: string; text: string }) => void;
   onCancel?: () => void;
   buttonText?: string;
 }
 
-const NoteForm: React.FC<NoteFormProps> = ({ edit, onSubmit }) => {
+const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit }) => {
   const [input, setInput] = useState<string>(edit?.text || '');
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,14 +27,14 @@ const NoteForm: React.FC<NoteFormProps> = ({ edit, onSubmit }) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // If its a new note, create a new note
+    // If its a new Todo, create a new Todo
     if (!edit) {
       onSubmit({
         id: uuid(),
         text: input,
       });
     } else {
-      // If its an existing note, update the note
+      // If its an existing Todo, update the Todo
       onSubmit({
         id: edit.id,
         text: input,
@@ -76,4 +79,4 @@ const NoteForm: React.FC<NoteFormProps> = ({ edit, onSubmit }) => {
   );
 };
 
-export default NoteForm;
+export default TodoForm;
