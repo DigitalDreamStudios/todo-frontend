@@ -28,7 +28,11 @@ const TodoContainer: React.FC = () => {
 
   const addTodo = (todo: { id: string; text: string }) => {
     if (!todo.text.trim()) {
-      toast.error('Please enter a valid Todo!');
+      toast.error(
+        'Please enter a valid Todo!', {
+        autoClose: 500,
+      }
+      );
       return;
     }
 
@@ -40,7 +44,10 @@ const TodoContainer: React.FC = () => {
 
     setTodos([newTodo, ...todos]);
 
-    toast.success('Todo added successfully!');
+    toast.success(
+      'To do added successfully!', {
+      autoClose: 500,
+    });
 
     // Add to local storage
     localStorage.setItem('todos', JSON.stringify([newTodo, ...todos]));
@@ -51,7 +58,10 @@ const TodoContainer: React.FC = () => {
 
     // Remove from local storage
     localStorage.setItem('todos', JSON.stringify(todos.filter(todo => todo.id !== id)));
-    toast.success('Todo removed successfully!');
+    toast.success(
+      'To do removed successfully!', {
+      autoClose: 500,
+    });
   };
 
   const completeTodo = (id: string) => {
@@ -69,6 +79,10 @@ const TodoContainer: React.FC = () => {
     setTodos(prev =>
       prev.map(todo => {
         if (todo.id === id) {
+          toast.success(
+            'To do updated successfully!', {
+            autoClose: 500,
+          });
           return { ...todo, text: text };
         }
         return todo;
