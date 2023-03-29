@@ -8,18 +8,13 @@ body {
     .card-container {
         width: 100%;
     }
-    .todo-button {
-        width: 82%;
-        border-radius: 2px;
-    }
+
 }
 
 @media screen and (max-width: 480px) {
     .card-container {
         width: 100%;
     }
-    .todo-button {
-        width: 82%;
-        border-radius: 2px;
-    }
+
+
 }
