@@ -4,6 +4,29 @@
     position: relative;
 }
 
+.todo-list {
+    height: 300px;
+    overflow: auto;
+    width: 90%;
+    padding-right: 1rem;
+}
+
+.todo-list::-webkit-scrollbar-track {
+    background: #a7abbd;
+    border-radius: 10px;
+}
+
+.todo-list::-webkit-scrollbar {
+    width: 10px;
+    background: #000000;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+    background: #441196;
+    border-radius: 10px;
+}
+
+
 .todo-row {
     display: flex;
     justify-content: space-between;
@@ -16,7 +39,7 @@
 
     padding: 16px;
     border-radius: 5px;
-    width: 90%;
+
 }
 
 .todo-row:nth-child(4n + 1) {
@@ -57,7 +80,7 @@
     color: #e2e2e2;
 }
 
-.todo-input.edit{
+.todo-input.edit {
     border: 2px solid #161a2b;
     background: #161a2b;
 }
