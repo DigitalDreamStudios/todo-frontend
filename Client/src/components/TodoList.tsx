@@ -40,7 +40,7 @@ const TodoList: React.FC<TodoProps> = ({ todos }) => {
     };
 
     return (
-        <>
+        <div className='todo-list'>
             {todos.map((todo) => (
                 <div
                     className={`todo-row ${todo.status ? 'complete' : ''}`}
@@ -69,7 +69,7 @@ const TodoList: React.FC<TodoProps> = ({ todos }) => {
                     )}
                 </div>
             ))}
-        </>
+        </div>
     );
 };
 
