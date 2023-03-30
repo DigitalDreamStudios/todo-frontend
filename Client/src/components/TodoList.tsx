@@ -47,6 +47,7 @@ const TodoList: React.FC<TodoProps> = ({
     };
 
     return (
+        <div className="todo-list">
             <>
                 {todos.map((todo) => (
                     <div
@@ -81,6 +82,7 @@ const TodoList: React.FC<TodoProps> = ({
                     </div>
                 ))}
             </>
+        </div>
     );
 };
 
