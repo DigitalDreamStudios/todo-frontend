@@ -47,40 +47,40 @@ const TodoList: React.FC<TodoProps> = ({
     };
 
     return (
-        <>
-            {todos.map((todo) => (
-                <div
-                    className={`todo-row ${todo.isComplete ? 'complete' : ''}`}
-                    key={todo.id}
-                >
-                    {edit.id === todo.id ? (
-                        <TodoForm
-                            edit={todo}
-                            onSubmit={handleEditSubmit}
-                            onCancel={handleEditCancel}
-                            buttonText="Save"
-                        />
+            <>
+                {todos.map((todo) => (
+                    <div
+                        className={`todo-row ${todo.isComplete ? 'complete' : ''}`}
+                        key={todo.id}
+                    >
+                        {edit.id === todo.id ? (
+                            <TodoForm
+                                edit={todo}
+                                onSubmit={handleEditSubmit}
+                                onCancel={handleEditCancel}
+                                buttonText="Save"
+                            />
 
-                    ) : (
-                        <>
-                            <div onClick={() => completeTodo(todo.id)}>{todo.text}</div>
-                            <div className="icons">
-                                <RiCloseCircleLine
-                                    onClick={() => removeTodo(todo.id)}
-                                    className="delete-icon"
-                                />
-                                <TiEdit
-                                    onClick={() =>
-                                        setEdit({ id: todo.id, text: todo.text })
-                                    }
-                                    className="edit-icon"
-                                />
-                            </div>
-                        </>
-                    )}
-                </div>
-            ))}
-        </>
+                        ) : (
+                            <>
+                                <div onClick={() => completeTodo(todo.id)}>{todo.text}</div>
+                                <div className="icons">
+                                    <RiCloseCircleLine
+                                        onClick={() => removeTodo(todo.id)}
+                                        className="delete-icon"
+                                    />
+                                    <TiEdit
+                                        onClick={() =>
+                                            setEdit({ id: todo.id, text: todo.text })
+                                        }
+                                        className="edit-icon"
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
+            </>
     );
 };
 
