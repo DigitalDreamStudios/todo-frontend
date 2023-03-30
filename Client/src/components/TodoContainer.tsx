@@ -15,7 +15,7 @@ const TodoContainer: React.FC<{}> = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    axios.get('/api/getall')
+    axios.get('/api/getAll')
       .then(res => {
         sessionStorage.setItem('todos', JSON.stringify(res.data));
         setTodos(res.data);

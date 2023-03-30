@@ -33,15 +33,6 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDes
     }
   };
 
-  const handleEditSubmit = (todo: Todo) => {
-    editTodo(todo);
-    onSubmit?.(todo);
-  };
-
-  const handleEditCancel = () => {
-    onCancel?.();
-  };
-
   return (
     <form onSubmit={handleSubmit} className="todo-form">
       {edit ? (

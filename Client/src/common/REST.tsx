@@ -5,7 +5,7 @@ import { TodoType } from '../types/todo.type';
 // GET METHOD
 const getTodos = () => {
     // GET all Todos from API and save it on session storage
-    axios.get('/api/getall')
+    axios.get('/api/getAll')
         .then(res => {
             sessionStorage.setItem('todos', JSON.stringify(res.data));
         })
@@ -54,22 +54,36 @@ const removeTodo = (_id: string) => {
         });
 };
 
+// PATCH METHOD
 const completeTodo = (_id: string) => {
     // PATCH a Todo from API and save it on session storage
-    axios.patch(`/api/complete/?id=${_id}`)
-        .then(res => {
-            return toast.success(
-                'To do completed successfully!', {
-                autoClose: 500,
-            });
+    axios.get(`/api/getOne/?id=${_id}`)
+        .then(response => {
+            const currentStatus = response.data.status;
+            const newStatus = !currentStatus; // toggle the current status
+            axios.patch(`/api/update/?id=${_id}`, { status: newStatus })
+                .then(res => {
+                    return toast.success(
+                        'To do completed successfully!', {
+                        autoClose: 500,
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         })
-        .catch(err => {
-            console.log(err);
+        .catch(error => {
+            console.log(error);
         });
 };
 
-const editTodo = (todo: TodoType) => {
-    axios.patch(`/api/update/?id=${todo._id}`, todo)
+// PATCH METHOD
+const editTodo = async (todo: TodoType) => {
+    console.log(todo);
+    
+    await axios.patch(`/api/update/?id=${todo._id}`, {
+        description: todo.description,
+    })
         .then(res => {
             return toast.success(
                 'To do updated successfully!', {
@@ -80,6 +94,5 @@ const editTodo = (todo: TodoType) => {
             console.log(err);
         });
 };
-
 
 export { getTodos, addTodo, removeTodo, completeTodo, editTodo }
