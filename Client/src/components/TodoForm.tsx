@@ -1,78 +1,78 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
-import uuid from 'react-uuid';
+import { TodoFormProps, Todo } from '../interfaces/todo.interface';
+import { addTodo, editTodo } from '../common/function';
 
-// Import styles
 import '../assets/css/form.css'
 
-interface TodoFormProps {
-  edit?: { id: string; text: string };
-  onSubmit: (Todo: { id: string; text: string }) => void;
-  onCancel?: () => void;
-  buttonText?: string;
-}
-
-const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit }) => {
-  const [input, setInput] = useState<string>(edit?.text || '');
+const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDescription }) => {
+  const [description, setDescription] = useState(edit ? edit.description : '');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // If its a new Todo, create a new Todo
     if (!edit) {
-      onSubmit({
-        id: uuid(),
-        text: input,
-      });
+      const newTodo = {
+        description: description,
+        status: false
+      }
+      addTodo(newTodo);
+      setDescription('');
     } else {
-      // If its an existing Todo, update the Todo
+      const updatedTodo = {
+        description: description,
+        status: edit.status
+      }
+      editTodo(updatedTodo);
       onSubmit({
-        id: edit.id,
-        text: input,
+        description: '',
+        status: false
       });
     }
+  };
 
-    setInput('');
+  const handleEditSubmit = (todo: Todo) => {
+    editTodo(todo);
+    onSubmit(todo);
+  };
+
+  const handleEditCancel = () => {
+    onCancel?.();
   };
 
   return (
-    <form onSubmit={handleSubmit} className='todo-form'>
+    <form onSubmit={handleSubmit} className="todo-form">
       {edit ? (
         <>
           <input
-            placeholder='Update your item'
-            value={input}
-            onChange={handleChange}
-            name='text'
+            type="text"
+            placeholder="Update your todo"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
             ref={inputRef}
-            className='todo-input edit'
-          />
-          <button className='todo-button edit'>
-            Update
+            className="todo-input edit" />
+          <button className="todo-button edit">{buttonDescription}</button>
+          <button
+            type="button"
+            className="todo-button cancel"
+            onClick={handleEditCancel}>
+            Cancel
           </button>
         </>
       ) : (
         <>
           <input
-            placeholder='Add a todo'
-            value={input}
-            onChange={handleChange}
-            name='text'
-            className='todo-input'
+            type="text"
+            placeholder="Add a todo"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
             ref={inputRef}
-          />
-          <button className='todo-button'>
-            Add todo
-          </button>
+            className="todo-input" />
+          <button className="todo-button">Add todo</button>
         </>
       )}
     </form>
