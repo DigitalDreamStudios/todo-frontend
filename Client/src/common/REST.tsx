@@ -55,8 +55,8 @@ const removeTodo = (_id: string) => {
 };
 
 const completeTodo = (_id: string) => {
-    // PUT a Todo from API and save it on session storage
-    axios.put(`/api/complete/?id=${_id}`)
+    // PATCH a Todo from API and save it on session storage
+    axios.patch(`/api/complete/?id=${_id}`)
         .then(res => {
             return toast.success(
                 'To do completed successfully!', {
@@ -69,9 +69,12 @@ const completeTodo = (_id: string) => {
 };
 
 const editTodo = (todo: TodoType) => {
-    axios.put('/api/update', todo)
+    axios.patch(`/api/update/?id=${todo._id}`, todo)
         .then(res => {
-            return res.data.todo;
+            return toast.success(
+                'To do updated successfully!', {
+                autoClose: 500,
+            });
         })
         .catch(err => {
             console.log(err);

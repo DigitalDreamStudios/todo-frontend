@@ -1,43 +1,41 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { TodoFormProps, Todo } from '../interfaces/todo.interface';
-import { addTodo, editTodo } from '../common/function';
+import { addTodo, editTodo } from '../common/REST';
 
-import '../assets/css/form.css'
+import '../assets/css/form.css';
 
-const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDescription }) => {
-  const [description, setDescription] = useState(edit ? edit.description : '');
+const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDescription = 'Save' }) => {
+  const [description, setDescription] = useState(edit?.description || '');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  });
+  }, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!edit) {
       const newTodo = {
-        description: description,
-        status: false
-      }
+        description,
+        status: false,
+      };
       addTodo(newTodo);
       setDescription('');
     } else {
       const updatedTodo = {
-        description: description,
-        status: edit.status
-      }
+        _id: edit._id,
+        description,
+        status: edit.status,
+      };
       editTodo(updatedTodo);
-      onSubmit({
-        description: '',
-        status: false
-      });
+      onSubmit?.({ description: '', status: false });
     }
   };
 
   const handleEditSubmit = (todo: Todo) => {
     editTodo(todo);
-    onSubmit(todo);
+    onSubmit?.(todo);
   };
 
   const handleEditCancel = () => {
@@ -52,16 +50,11 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDes
             type="text"
             placeholder="Update your todo"
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             ref={inputRef}
-            className="todo-input edit" />
+            className="todo-input edit"
+          />
           <button className="todo-button edit">{buttonDescription}</button>
-          <button
-            type="button"
-            className="todo-button cancel"
-            onClick={handleEditCancel}>
-            Cancel
-          </button>
         </>
       ) : (
         <>
@@ -69,9 +62,10 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDes
             type="text"
             placeholder="Add a todo"
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             ref={inputRef}
-            className="todo-input" />
+            className="todo-input"
+          />
           <button className="todo-button">Add todo</button>
         </>
       )}

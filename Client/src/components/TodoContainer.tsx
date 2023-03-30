@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import uuid from 'react-uuid';
+import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
-// Import components
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 
-// Import styles
 import '../assets/css/card.css';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 
-// Import interfaces
 import { Todo } from '../interfaces/todo.interface';
+import { removeTodo, completeTodo, editTodo, addTodo } from '../common/REST';
 
-// Import functions
-import { getTodos, removeTodo, completeTodo } from '../common/function';
-
-const TodoContainer: React.FC = () => {
+const TodoContainer: React.FC<{}> = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
@@ -35,22 +29,13 @@ const TodoContainer: React.FC = () => {
     <div className='card-container'>
       <div className='card'>
         <h1>What's the Plan for Today?</h1>
-        <TodoForm
-          onSubmit={()=>{
-            console.log('onSubmit');
-          }}
-          edit={undefined}
-          onCancel={() => { }}
-          buttonDescription=''
-        />
-
+        <TodoForm onSubmit={addTodo} />
         <TodoList
           todos={todos}
           completeTodo={completeTodo}
           removeTodo={removeTodo}
-          editTodo={ undefined }
+          editTodo={editTodo}
         />
-
         <ToastContainer />
       </div>
     </div>

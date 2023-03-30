@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
-import { removeTodo, completeTodo, editTodo } from '../common/function';
+import { removeTodo, completeTodo, editTodo } from '../common/REST';
 
 // Import components
 import TodoForm from './TodoForm';
@@ -9,11 +9,8 @@ import TodoForm from './TodoForm';
 // Import styles
 import '../assets/css/list.css'
 
-// Import interfaces
-import { TodoProps } from '../interfaces/todo.interface';
-
 // Import types
-import { TodoType } from '../types/todo.type';
+import { TodoType, TodoProps } from '../types/todo.type';
 
 const TodoList: React.FC<TodoProps> = ({ todos }) => {
     const [edit, setEdit] = useState<TodoType>({
