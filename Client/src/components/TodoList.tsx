@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
+import { AiOutlineCheckCircle } from 'react-icons/ai';
+
 
 // Import components
 import TodoForm from './TodoForm';
@@ -66,15 +68,18 @@ const TodoList: React.FC<TodoProps> = ({
                             <>
                                 <div onClick={() => completeTodo(todo.id)}>{todo.text}</div>
                                 <div className="icons">
-                                    <RiCloseCircleLine
-                                        onClick={() => removeTodo(todo.id)}
-                                        className="delete-icon"
-                                    />
+                                    <AiOutlineCheckCircle onClick={() => completeTodo(todo.id)}
+                                        className="">
+                                    </AiOutlineCheckCircle>
                                     <TiEdit
                                         onClick={() =>
                                             setEdit({ id: todo.id, text: todo.text })
                                         }
                                         className="edit-icon"
+                                    />
+                                    <RiCloseCircleLine
+                                        onClick={() => removeTodo(todo.id)}
+                                        className="delete-icon"
                                     />
                                 </div>
                             </>
