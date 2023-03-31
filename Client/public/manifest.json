@@ -1,0 +1,19 @@
+{
+    "id": "link.evildev.todo-client",
+    "name": "To do List",
+    "short_name": "Todo",
+    "icons": [
+        {
+            "src": "tasks.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "description": "To do List Web App",
+    "theme_color": "#ffffff",
+    "scope": "/",
+    "lang": "en-US"
+}
