@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
-
 
 // Import components
 import TodoForm from './TodoForm';
@@ -10,83 +9,68 @@ import TodoForm from './TodoForm';
 // Import styles
 import '../assets/css/list.css'
 
-type Todo = {
-    id: string;
-    text: string;
-    isComplete: boolean;
-};
+// Import types
+import { TodoType, TodoProps } from '../types/todo.type';
 
-type TodoProps = {
-    todos: Todo[];
-    completeTodo: (id: string) => void;
-    removeTodo: (id: string) => void;
-    editTodo: (id: string, text: string) => void;
-};
-
-const TodoList: React.FC<TodoProps> = ({
-    todos,
-    completeTodo,
-    removeTodo,
-    editTodo,
-}) => {
-    const [edit, setEdit] = useState<{ id: string | ''; text: string }>({
-        id: '',
-        text: '',
+const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo, editTodo }) => {
+    const [edit, setEdit] = useState<TodoType>({
+        _id: "",
+        description: "",
+        status: false
     });
-    const [editedText, setEditedText] = useState<string>('');
 
-    const handleEditSubmit = (Todo: { id: string; text: string }) => {
-        if (!Todo.text.trim()) {
-            return;
-        }
-        editTodo(Todo.id, Todo.text.trim());
-        setEdit({ id: '', text: '' });
+    const handleEditSubmit = async (todo: TodoType) => {
+        setEdit({
+            _id: "",
+            description: "",
+            status: false
+        });
     };
 
     const handleEditCancel = () => {
-        setEdit({ id: '', text: '' });
-        setEditedText('');
+        setEdit({
+            _id: "",
+            description: "",
+            status: false
+        });
     };
 
     return (
-        <div className="todo-list">
-            <>
-                {todos.map((todo) => (
-                    <div
-                        className={`todo-row ${todo.isComplete ? 'complete' : ''}`}
-                        key={todo.id}
-                    >
-                        {edit.id === todo.id ? (
-                            <TodoForm
-                                edit={todo}
-                                onSubmit={handleEditSubmit}
-                                onCancel={handleEditCancel}
-                                buttonText="Save"
-                            />
+        <div className='todo-list'>
+            {todos?.map((todo) => (
+                <div
+                    className={`todo-row ${todo.status ? 'complete' : ''}`}
+                    key={todo._id}>
+                    {edit._id === todo._id ? (
+                        <TodoForm
+                            edit={todo}
+                            onSubmit={handleEditSubmit}
+                            onCancel={handleEditCancel}
+                            onEdit={editTodo}
+                            buttonDescription="Save"
+                        />
 
-                        ) : (
-                            <>
-                                <div onClick={() => completeTodo(todo.id)}>{todo.text}</div>
-                                <div className="icons">
-                                    <AiOutlineCheckCircle onClick={() => completeTodo(todo.id)}
-                                        className="">
-                                    </AiOutlineCheckCircle>
-                                    <TiEdit
-                                        onClick={() =>
-                                            setEdit({ id: todo.id, text: todo.text })
-                                        }
-                                        className="edit-icon"
-                                    />
-                                    <RiCloseCircleLine
-                                        onClick={() => removeTodo(todo.id)}
-                                        className="delete-icon"
-                                    />
-                                </div>
-                            </>
-                        )}
-                    </div>
-                ))}
-            </>
+                    ) : (
+                        <>
+                            <div onClick={() => completeTodo && completeTodo(todo._id)}>{todo.description}</div>
+                            <div className="icons">
+                                <AiOutlineCheckCircle onClick={() => completeTodo && completeTodo(todo._id)}
+                                    className="">
+                                </AiOutlineCheckCircle>
+                                <TiEdit
+                                    onClick={() =>
+                                        setEdit({ _id: todo._id, description: todo.description, status: todo.status })
+                                    }
+                                    className="edit-icon" />
+                                <RiCloseCircleLine
+                                    onClick={() => removeTodo && removeTodo(todo._id)}
+                                    className="delete-icon"
+                                />
+                            </div>
+                        </>
+                    )}
+                </div>
+            ))}
         </div>
     );
 };
