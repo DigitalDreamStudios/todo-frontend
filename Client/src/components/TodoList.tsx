@@ -12,14 +12,14 @@ import '../assets/css/list.css'
 // Import types
 import { TodoType, TodoProps } from '../types/todo.type';
 
-const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo }) => {
+const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo, editTodo }) => {
     const [edit, setEdit] = useState<TodoType>({
         _id: "",
         description: "",
         status: false
     });
 
-    const handleEditSubmit = (todo: TodoType) => {
+    const handleEditSubmit = async (todo: TodoType) => {
         setEdit({
             _id: "",
             description: "",
@@ -46,7 +46,9 @@ const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo }) => {
                             edit={todo}
                             onSubmit={handleEditSubmit}
                             onCancel={handleEditCancel}
-                            buttonDescription="Save" />
+                            onEdit={editTodo}
+                            buttonDescription="Save"
+                        />
 
                     ) : (
                         <>

@@ -10,6 +10,7 @@ interface TodoFormProps {
     edit?: TodoType;
     onSubmit: (todo: TodoType) => void;
     onCancel?: () => void;
+    onEdit?: (todo: TodoType) => void;
     buttonDescription?: string;
 }
 

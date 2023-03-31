@@ -7,11 +7,22 @@ import { Todo } from "../interfaces/todo.interface";
 const getTodo = () => {
     return axios.get('/api/getAll')
         .then(res => {
-            return res.data;
+            const todos = res.data.map((todo: Todo) => {
+                return {
+                    _id: todo._id,
+                    description: todo.description,
+                    status: todo.status,
+                };
+            });
+            return todos;
         })
         .catch(err => {
-            console.log(err);
-            return [];
+            if (err.response && err.response.status === 404) {
+                return [];
+            } else {
+                console.log(err);
+                return [];
+            }
         });
 };
 
@@ -53,7 +64,7 @@ const removeTodo = async (_id: string): Promise<boolean> => {
 };
 
 // PATCH METHOD
-const completeTodo = async (_id: string) => {
+const completeTodo = async (_id: string): Promise<Todo | undefined> => {
     try {
         const response = await axios.get(`/api/getOne/?id=${_id}`);
         const currentStatus = response.data.status;
@@ -73,6 +84,7 @@ const completeTodo = async (_id: string) => {
         return updatedTodo;
     } catch (error) {
         console.log(error);
+        return undefined;
     }
 };
 
@@ -82,10 +94,19 @@ const editTodo = async (todo: TodoType): Promise<Todo | undefined> => {
         const res = await axios.patch(`/api/update/?id=${todo._id}`, {
             description: todo.description,
         });
-        toast.success('To do updated successfully!', { autoClose: 500 });
-        return res.data.todo;
-    } catch (error) {
-        console.log(error);
+        const updatedTodo = {
+            _id: res.data.todo._id,
+            description: res.data.todo.description,
+            status: res.data.todo.status,
+        }
+        toast.success(
+            'To do updated successfully!', {
+            autoClose: 500
+        });
+        return updatedTodo;
+    } catch (err) {
+        console.log(err);
+        return undefined;
     }
 };
 

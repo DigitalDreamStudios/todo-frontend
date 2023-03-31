@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { TodoFormProps, Todo } from '../interfaces/todo.interface';
-import { editTodo } from '../common/REST';
 
 import '../assets/css/form.css';
 
-const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDescription = 'Save' }) => {
+const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, onEdit, buttonDescription = 'Save' }) => {
   const [description, setDescription] = useState(edit?.description || '');
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -28,7 +27,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDes
         description,
         status: edit.status,
       };
-      editTodo(updatedTodo);
+      onEdit?.(updatedTodo);
       onSubmit?.({ description: '', status: false });
     }
   };

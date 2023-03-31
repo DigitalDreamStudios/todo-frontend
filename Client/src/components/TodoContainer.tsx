@@ -58,7 +58,7 @@ const TodoContainer: React.FC<{}> = () => {
       description: todo.description,
       status: todo.status,
     });
-
+    
     if (updatedTodo) {
       const newTodos = todos.map((todo) => {
         if (todo._id === updatedTodo._id) {
@@ -84,7 +84,7 @@ const TodoContainer: React.FC<{}> = () => {
     <div className='card-container'>
       <div className='card'>
         <h1>What's the Plan for Today?</h1>
-        <TodoForm onSubmit={onFormSubmit} />
+        <TodoForm onSubmit={onFormSubmit} onEdit={onEditTodo} />
         <TodoList
           todos={todos}
           completeTodo={onCompleteTodo}
