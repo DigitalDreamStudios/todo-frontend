@@ -20,7 +20,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, buttonDes
         description,
         status: false,
       };
-      addTodo(newTodo);
+      onSubmit?.(newTodo);
       setDescription('');
     } else {
       const updatedTodo = {

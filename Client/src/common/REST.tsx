@@ -1,42 +1,43 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { TodoType } from '../types/todo.type';
+import { Todo } from "../interfaces/todo.interface";
 
 // GET METHOD
-const getTodos = () => {
-    // GET all Todos from API and save it on session storage
-    axios.get('/api/getAll')
+const getTodo = () => {
+    return axios.get('/api/getAll')
         .then(res => {
-            sessionStorage.setItem('todos', JSON.stringify(res.data));
+            return res.data;
         })
         .catch(err => {
             console.log(err);
+            return [];
         });
 };
 
 // POST METHOD
-const addTodo = (todo: TodoType) => {
+const addTodo = async (todo: TodoType): Promise<Todo | undefined> => {
     if (!todo.description.trim()) {
-        return toast.error(
-            'Please enter a valid Todo!', {
+        toast.error('Please enter a valid Todo!', {
             autoClose: 500,
-        });;
-    }
-
-    // POST a new Todo to API and save it on session storage
-    axios.post('/api/create', todo)
-        .then(res => {
-            // Update session storage data, add the new item
-            getTodos();
-
-            return toast.success(
-                'To do added successfully!', {
-                autoClose: 500,
-            });
-        })
-        .catch(err => {
-            console.log(err);
         });
+        return undefined;
+    }
+    try {
+        const res = await axios.post('/api/create', todo);
+        const newTodo = {
+            _id: res.data.todo._id,
+            description: res.data.todo.description,
+            status: res.data.todo.status,
+        };
+        toast.success('To do added successfully!', {
+            autoClose: 500,
+        });
+        return { ...newTodo, _id: newTodo._id };
+    } catch (error) {
+        console.error(error);
+        return undefined;
+    }
 };
 
 // DELETE METHOD
@@ -80,7 +81,7 @@ const completeTodo = (_id: string) => {
 // PATCH METHOD
 const editTodo = async (todo: TodoType) => {
     console.log(todo);
-    
+
     await axios.patch(`/api/update/?id=${todo._id}`, {
         description: todo.description,
     })
@@ -95,4 +96,4 @@ const editTodo = async (todo: TodoType) => {
         });
 };
 
-export { getTodos, addTodo, removeTodo, completeTodo, editTodo }
+export { getTodo, addTodo, removeTodo, completeTodo, editTodo }

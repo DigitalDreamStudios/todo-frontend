@@ -9,27 +9,39 @@ import '../assets/css/card.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Todo } from '../interfaces/todo.interface';
-import { removeTodo, completeTodo, editTodo, addTodo } from '../common/REST';
+import { getTodo, removeTodo, completeTodo, editTodo, addTodo } from '../common/REST';
+import { TodoType } from '../types/todo.type';
 
 const TodoContainer: React.FC<{}> = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const onFormSubmit = async (todo: TodoType) => {
+    const newTodo = await addTodo({
+      _id: todo._id,
+      description: todo.description,
+      status: false,
+    });
+
+    if (newTodo) {
+      setTodos([...todos, newTodo]);
+      sessionStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
+    }
+  };
+
   useEffect(() => {
-    axios.get('/api/getAll')
-      .then(res => {
-        sessionStorage.setItem('todos', JSON.stringify(res.data));
-        setTodos(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    const fetchData = async () => {
+      const todos = await getTodo();
+      setTodos(todos);
+      sessionStorage.setItem('todos', JSON.stringify(todos));
+    };
+    fetchData();
   }, []);
 
   return (
     <div className='card-container'>
       <div className='card'>
         <h1>What's the Plan for Today?</h1>
-        <TodoForm onSubmit={addTodo} />
+        <TodoForm onSubmit={onFormSubmit} />
         <TodoList
           todos={todos}
           completeTodo={completeTodo}

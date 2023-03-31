@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 import { removeTodo, completeTodo, editTodo } from '../common/REST';
@@ -38,7 +38,7 @@ const TodoList: React.FC<TodoProps> = ({ todos }) => {
 
     return (
         <div className='todo-list'>
-            {todos.map((todo) => (
+            {todos?.map((todo) => (
                 <div
                     className={`todo-row ${todo.status ? 'complete' : ''}`}
                     key={todo._id}>
