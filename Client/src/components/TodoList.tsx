@@ -50,9 +50,9 @@ const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo }) => {
 
                     ) : (
                         <>
-                            <div onClick={() => completeTodo(todo._id)}>{todo.description}</div>
+                            <div onClick={() => completeTodo && completeTodo(todo._id)}>{todo.description}</div>
                             <div className="icons">
-                                <AiOutlineCheckCircle onClick={() => completeTodo(todo._id)}
+                                <AiOutlineCheckCircle onClick={() => completeTodo && completeTodo(todo._id)}
                                     className="">
                                 </AiOutlineCheckCircle>
                                 <TiEdit
@@ -61,7 +61,7 @@ const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo }) => {
                                     }
                                     className="edit-icon" />
                                 <RiCloseCircleLine
-                                    onClick={() => removeTodo(todo._id)}
+                                    onClick={() => removeTodo && removeTodo(todo._id)}
                                     className="delete-icon"
                                 />
                             </div>
