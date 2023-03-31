@@ -28,6 +28,49 @@ const TodoContainer: React.FC<{}> = () => {
     }
   };
 
+  const onCompleteTodo = async (_id: string) => {
+    const updatedTodo = await completeTodo(_id);
+    
+    if (updatedTodo) {
+      const newTodos = todos.map((todo) => {
+        if (todo._id === _id) {
+          return updatedTodo;
+        }
+        return todo;
+      });
+      setTodos(newTodos);
+      sessionStorage.setItem('todos', JSON.stringify(newTodos));
+    }
+  };
+
+  const onRemoveTodo = async (_id: string) => {
+    const removedTodo = await removeTodo(_id);
+    if (removedTodo) {
+      const newTodos = todos.filter((todo) => todo._id !== _id);
+      setTodos(newTodos);
+      sessionStorage.setItem('todos', JSON.stringify(newTodos));
+    }
+  };
+
+  const onEditTodo = async (todo: TodoType) => {
+    const updatedTodo = await editTodo({
+      _id: todo._id,
+      description: todo.description,
+      status: todo.status,
+    });
+
+    if (updatedTodo) {
+      const newTodos = todos.map((todo) => {
+        if (todo._id === updatedTodo._id) {
+          return updatedTodo;
+        }
+        return todo;
+      });
+      setTodos(newTodos);
+      sessionStorage.setItem('todos', JSON.stringify(newTodos));
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const todos = await getTodo();
@@ -44,9 +87,9 @@ const TodoContainer: React.FC<{}> = () => {
         <TodoForm onSubmit={onFormSubmit} />
         <TodoList
           todos={todos}
-          completeTodo={completeTodo}
-          removeTodo={removeTodo}
-          editTodo={editTodo}
+          completeTodo={onCompleteTodo}
+          removeTodo={onRemoveTodo}
+          editTodo={onEditTodo}
         />
         <ToastContainer />
       </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
-import { removeTodo, completeTodo, editTodo } from '../common/REST';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 
 // Import components
@@ -13,7 +12,7 @@ import '../assets/css/list.css'
 // Import types
 import { TodoType, TodoProps } from '../types/todo.type';
 
-const TodoList: React.FC<TodoProps> = ({ todos }) => {
+const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo }) => {
     const [edit, setEdit] = useState<TodoType>({
         _id: "",
         description: "",

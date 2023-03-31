@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { TodoFormProps, Todo } from '../interfaces/todo.interface';
-import { addTodo, editTodo } from '../common/REST';
+import { editTodo } from '../common/REST';
 
 import '../assets/css/form.css';
 

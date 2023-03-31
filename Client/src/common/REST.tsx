@@ -41,59 +41,53 @@ const addTodo = async (todo: TodoType): Promise<Todo | undefined> => {
 };
 
 // DELETE METHOD
-const removeTodo = (_id: string) => {
-    // DELETE a Todo from API and save it on session storage
-    axios.delete(`/api/delete/?id=${_id}`)
-        .then(res => {
-            return toast.success(
-                'To do removed successfully!', {
-                autoClose: 500,
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        });
+const removeTodo = async (_id: string): Promise<boolean> => {
+    try {
+        await axios.delete(`/api/delete/?id=${_id}`);
+        toast.success('To do removed successfully!', { autoClose: 500 });
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 };
 
 // PATCH METHOD
-const completeTodo = (_id: string) => {
-    // PATCH a Todo from API and save it on session storage
-    axios.get(`/api/getOne/?id=${_id}`)
-        .then(response => {
-            const currentStatus = response.data.status;
-            const newStatus = !currentStatus; // toggle the current status
-            axios.patch(`/api/update/?id=${_id}`, { status: newStatus })
-                .then(res => {
-                    return toast.success(
-                        'To do completed successfully!', {
-                        autoClose: 500,
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        })
-        .catch(error => {
-            console.log(error);
+const completeTodo = async (_id: string) => {
+    try {
+        const response = await axios.get(`/api/getOne/?id=${_id}`);
+        const currentStatus = response.data.status;
+        const newStatus = !currentStatus; // toggle the current status
+
+        // PATCH the new status to the API
+        const res = await axios.patch(`/api/update/?id=${_id}`, { status: newStatus });
+        const updatedTodo = {
+            _id: res.data.todo._id,
+            description: res.data.todo.description,
+            status: res.data.todo.status,
+        }
+        toast.success(
+            'To do completed successfully!', {
+            autoClose: 500
         });
+        return updatedTodo;
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 // PATCH METHOD
-const editTodo = async (todo: TodoType) => {
-    console.log(todo);
-
-    await axios.patch(`/api/update/?id=${todo._id}`, {
-        description: todo.description,
-    })
-        .then(res => {
-            return toast.success(
-                'To do updated successfully!', {
-                autoClose: 500,
-            });
-        })
-        .catch(err => {
-            console.log(err);
+const editTodo = async (todo: TodoType): Promise<Todo | undefined> => {
+    try {
+        const res = await axios.patch(`/api/update/?id=${todo._id}`, {
+            description: todo.description,
         });
+        toast.success('To do updated successfully!', { autoClose: 500 });
+        return res.data.todo;
+    } catch (error) {
+        console.log(error);
+    }
 };
+
 
 export { getTodo, addTodo, removeTodo, completeTodo, editTodo }
