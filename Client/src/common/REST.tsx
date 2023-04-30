@@ -5,7 +5,7 @@ import { Todo } from "../interfaces/todo.interface";
 
 // GET METHOD
 const getTodo = () => {
-    return axios.get('/api/getAll')
+    return axios.get('/api/todo')
         .then(res => {
             const todos = res.data.map((todo: Todo) => {
                 return {
@@ -35,7 +35,7 @@ const addTodo = async (todo: TodoType): Promise<Todo | undefined> => {
         return undefined;
     }
     try {
-        const res = await axios.post('/api/create', todo);
+        const res = await axios.post('/api/todo', todo);
         const newTodo = {
             _id: res.data.todo._id,
             description: res.data.todo.description,
@@ -54,7 +54,7 @@ const addTodo = async (todo: TodoType): Promise<Todo | undefined> => {
 // DELETE METHOD
 const removeTodo = async (_id: string): Promise<boolean> => {
     try {
-        await axios.delete(`/api/delete/?id=${_id}`);
+        await axios.delete(`/api/todo/?id=${_id}`);
         toast.success('To do removed successfully!', { autoClose: 500 });
         return true;
     } catch (error) {
@@ -66,12 +66,12 @@ const removeTodo = async (_id: string): Promise<boolean> => {
 // PATCH METHOD
 const completeTodo = async (_id: string): Promise<Todo | undefined> => {
     try {
-        const response = await axios.get(`/api/getOne/?id=${_id}`);
+        const response = await axios.get(`/api/todo/?id=${_id}`);
         const currentStatus = response.data.status;
         const newStatus = !currentStatus; // toggle the current status
 
         // PATCH the new status to the API
-        const res = await axios.patch(`/api/update/?id=${_id}`, { status: newStatus });
+        const res = await axios.patch(`/api/todo/?id=${_id}`, { status: newStatus });
         const updatedTodo = {
             _id: res.data.todo._id,
             description: res.data.todo.description,
@@ -91,7 +91,7 @@ const completeTodo = async (_id: string): Promise<Todo | undefined> => {
 // PATCH METHOD
 const editTodo = async (todo: TodoType): Promise<Todo | undefined> => {
     try {
-        const res = await axios.patch(`/api/update/?id=${todo._id}`, {
+        const res = await axios.patch(`/api/todo/?id=${todo._id}`, {
             description: todo.description,
         });
         const updatedTodo = {
