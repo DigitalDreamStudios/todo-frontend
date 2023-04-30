@@ -8,7 +8,7 @@ export class TodoController {
     constructor(private readonly todoService: TodoService) { }
 
     // Endpoint to create a new todo item
-    @Post('/create')
+    @Post()
     async create(@Res() res: any, @Body() createTodoDto: CreateTodoDto) {
         const todo = await this.todoService.createTodo(createTodoDto);
 
@@ -20,7 +20,7 @@ export class TodoController {
     }
 
     // Endpoint to get all todo items
-    @Get('/getAll')
+    @Get()
     async getAll(@Res() res: any) {
         const todos = await this.todoService.getTodos();
 
@@ -32,7 +32,7 @@ export class TodoController {
     }
 
     // Endpoint to get a single todo item by ID
-    @Get('/getOne')
+    @Get()
     async getOne(@Res() res: any, @Query('id') id: string) {
         const todo = await this.todoService.getTodoById(id);
 
@@ -44,7 +44,7 @@ export class TodoController {
     }
 
     // Endpoint to update a single todo item by ID
-    @Patch('/update')
+    @Patch()
     async update(@Res() res: any, @Query('id') id: string, @Body() createTodoDto: CreateTodoDto) {
         const todo = await this.todoService.updateTodoById(id, createTodoDto);
 
@@ -59,7 +59,7 @@ export class TodoController {
     }
 
     // Endpoint to delete a single todo item by ID
-    @Delete('/delete')
+    @Delete()
     async delete(@Res() res: any, @Query('id') id: string) {
         const todo = await this.todoService.deleteTodoById(id);
 
