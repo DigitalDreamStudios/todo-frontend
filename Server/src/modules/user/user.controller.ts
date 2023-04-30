@@ -8,7 +8,7 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     // Endpoint for creating a new user
-    @Post('/create')
+    @Post()
     async create(@Res() res: any, @Body() createUserDto: CreateUserDto) {
         const user = await this.userService.createUser(createUserDto);
 
@@ -19,7 +19,7 @@ export class UserController {
     }
 
     // Endpoint for getting all users
-    @Get('/getAll')
+    @Get()
     async getAll(@Res() res: any) {
         const users = await this.userService.getUsers();
 
@@ -31,7 +31,7 @@ export class UserController {
     }
 
     // Endpoint for getting a single user by id
-    @Get('/getOne')
+    @Get()
     async getOne(@Res() res: any, @Query('id') id: string) {
         const user = await this.userService.getUserById(id);
 
@@ -43,7 +43,7 @@ export class UserController {
     }
 
     // Endpoint for updating a user by id
-    @Patch('/update')
+    @Patch()
     async update(@Res() res: any, @Query('id') id: string, @Body() createUserDto: CreateUserDto) {
         const user = await this.userService.updateUserById(id, createUserDto);
 
@@ -58,7 +58,7 @@ export class UserController {
     }
 
     // Endpoint for deleting a user by id
-    @Delete('/delete')
+    @Delete()
     async delete(@Res() res: any, @Query('id') id: string) {
         const user = await this.userService.deleteUserById(id);
 
