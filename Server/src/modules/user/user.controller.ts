@@ -2,25 +2,15 @@ import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, Query, Res } fr
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
 import { notFound } from 'src/common/utils/notFound';
+import { Response } from 'express';
 
 @Controller('api/user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
-    // Endpoint for creating a new user
-    @Post()
-    async create(@Res() res: any, @Body() createUserDto: CreateUserDto) {
-        const user = await this.userService.createUser(createUserDto);
-
-        return res.status(HttpStatus.OK).json({
-            message: 'User created successfully',
-            user: user
-        });
-    }
-
     // Endpoint for getting all users
     @Get()
-    async getAll(@Res() res: any) {
+    async getAll(@Res() res: Response) {
         const users = await this.userService.getUsers();
 
         // If there are no users, return a 404 error with a message
@@ -32,7 +22,7 @@ export class UserController {
 
     // Endpoint for getting a single user by id
     @Get()
-    async getOne(@Res() res: any, @Query('id') id: string) {
+    async getOne(@Res() res: Response, @Query('id') id: string) {
         const user = await this.userService.getUserById(id);
 
         // If user is not found, return a 404 error with a message
@@ -42,9 +32,20 @@ export class UserController {
         return res.status(HttpStatus.OK).json(user);
     }
 
+    // Endpoint for creating a new user
+    @Post()
+    async create(@Res() res: Response, @Body() createUserDto: CreateUserDto) {
+        const user = await this.userService.createUser(createUserDto);
+
+        return res.status(HttpStatus.OK).json({
+            message: 'User created successfully',
+            user: user
+        });
+    }
+
     // Endpoint for updating a user by id
     @Patch()
-    async update(@Res() res: any, @Query('id') id: string, @Body() createUserDto: CreateUserDto) {
+    async update(@Res() res: Response, @Query('id') id: string, @Body() createUserDto: CreateUserDto) {
         const user = await this.userService.updateUserById(id, createUserDto);
 
         // If user is not found, return a 404 error with a message
@@ -59,7 +60,7 @@ export class UserController {
 
     // Endpoint for deleting a user by id
     @Delete()
-    async delete(@Res() res: any, @Query('id') id: string) {
+    async delete(@Res() res: Response, @Query('id') id: string) {
         const user = await this.userService.deleteUserById(id);
 
         // If user is not found, return a 404 error with a message
