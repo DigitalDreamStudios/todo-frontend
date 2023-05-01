@@ -1,5 +1,5 @@
 import { User } from '../../modules/user/interface/user.interface';
-import { HttpException } from '@nestjs/common';
+import { notFound } from '../errors/notFound.error';
 
 /**
  * Retrieves a single User document by email from the database
@@ -14,6 +14,6 @@ export async function findOneByEmail(userModel: any, email: string): Promise<Use
     if (findUser) {
         return findUser;
     } else {
-        throw new HttpException('USER_NOT_FOUND', 404);
+        notFound('USER');
     }
 }

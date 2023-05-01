@@ -16,10 +16,10 @@ export class AuthService {
 
     async login(createLoginDto: CreateLoginDto) {
         const { email, password } = createLoginDto;
-        
+
         // Find a user by their email
         const findUser = await findOneByEmail(this.userModel, email);
-        
+
         // Check if the provided password matches the user's stored password
         const checkPassword = await comparePassword(password, findUser.password)
 

@@ -1,5 +1,5 @@
-import { HttpException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { unauthorized } from '../errors/unathorized.error';
 
 /**
  * Compares a plaintext password to a hashed password
@@ -14,6 +14,6 @@ export async function comparePassword(password: string, hashedPassword: string):
     if (isPasswordValid) {
         return true;
     } else {
-        throw new HttpException('PASSWORD_INCORRECT', 403);
+        unauthorized('PASSWORD');
     }
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Res, Get, Patch, Query, Delete } from '@nestjs/common';
 import { CreateTodoDto } from './dto/todo.dto';
 import { TodoService } from './todo.service';
-import { notFound } from '../../common/utils/notFound';
+import { notFound } from '../../common/errors/notFound.error';
 import { Response } from 'express';
 
 @Controller('api/todo')
@@ -14,7 +14,7 @@ export class TodoController {
         const todos = await this.todoService.getTodos();
 
         // If no todo items are found, return a "not found" response
-        if (todos.length === 0) return notFound(res, 'To do');
+        if (todos.length === 0) return notFound('TODO');
 
         // Return response with status code 200 and the array of todo items
         return res.status(HttpStatus.OK).json(todos);
@@ -26,7 +26,7 @@ export class TodoController {
         const todo = await this.todoService.getTodoById(id);
 
         // If no todo item is found with the given ID, return a "not found" response
-        if (!todo) return notFound(res, 'To do');
+        if (!todo) return notFound('TODO');
 
         // Return response with status code 200 and the requested todo item
         return res.status(HttpStatus.OK).json(todo);
@@ -50,7 +50,7 @@ export class TodoController {
         const todo = await this.todoService.updateTodoById(id, createTodoDto);
 
         // If no todo item is found with the given ID, return a "not found" response
-        if (!todo) return notFound(res, 'To do');
+        if (!todo) return notFound('TODO');
 
         // Return response with status code 200 and the updated todo item
         return res.status(HttpStatus.OK).json({
@@ -65,7 +65,7 @@ export class TodoController {
         const todo = await this.todoService.deleteTodoById(id);
 
         // If no todo item is found with the given ID, return a "not found" response
-        if (!todo) return notFound(res, 'To do');
+        if (!todo) return notFound('TODO');
 
         // Return response with status code 200 and a success message
         return res.status(HttpStatus.OK).json({
