@@ -14,6 +14,12 @@ export class AuthService {
         @InjectModel(User.name) private readonly userModel: Model<User>
     ) { }
 
+    /**
+     * Authenticates a user and returns a signed JSON Web Token (JWT)
+     *
+     * @param {CreateLoginDto} createLoginDto - An object containing the user's login credentials
+     * @returns A Promise that resolves to an object containing a signed JWT and the user's information
+     */
     async login(createLoginDto: CreateLoginDto) {
         const { email, password } = createLoginDto;
 
