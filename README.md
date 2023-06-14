@@ -1,41 +1,30 @@
-# Todo Web Application and API
+# React TypeScript To-Do List
 
-This is a web application and API for managing tasks, or "todos". It allows users to create, edit, delete and mark tasks as completed.
+This is a simple to-do list application built with React and TypeScript. It allows users to add, edit, and delete tasks.
 
 ## Features
 
-- Create a new task
-- Edit an existing task
+- Add a task
+- Edit a task
 - Delete a task
 - Mark a task as completed
-- View all tasks
-- View completed tasks
-- View active tasks
 
-## API Endpoints
+## Getting Started
 
-- `GET /todos/getAll` - Retrieve all todos
-- `GET /todos/getOne?id=` - Retrieve a specific todo
-- `POST /todos/create` - Create a new todo
-- `PUT /todos/update?id=` - Update an existing todo
-- `DELETE /todos/delete?id=` - Delete a todo
+To get started with this application, follow these steps:
+
+1. Clone this repository to your local machine.
+2. Install the dependencies using `npm install`.
+3. Run the development server using `npm run dev`.
+4. Open [http://localhost:5174](http://localhost:5174) to view the application in your browser.
+
 
 ## Technologies Used
 
-- Node.js
-- Nest.js
-- MongoDB
-- Mongoose
-- React.js
-
-## Installation
-
-1. Clone the repository
-2. Install dependencies using `npm install`
-3. Start the server using `npm start`
-4. Navigate to `localhost:3000` to view the web application
-5. Use API endpoints to interact with the data
+- React
+- TypeScript
+- CSS
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
