@@ -1,5 +1,6 @@
 {
   "name": "todo-client",
+  "homepage": "https://todo.cabrera-dev.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",
