@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
-import { TodoFormProps, Todo } from '../interfaces/todo.interface';
-
-import '../assets/css/form.css';
+import { TodoFormProps } from '../../interfaces/todo.interface';
+import './TodoForm.css';
 
 const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, onEdit, buttonDescription = 'Save' }) => {
-  const [description, setDescription] = useState(edit?.description || '');
+  const [description, setDescription] = useState<string>(edit?.description || '');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Focus the input field on component mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -35,6 +35,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, onEdit, b
   return (
     <form onSubmit={handleSubmit} className="todo-form">
       {edit ? (
+        // Render edit form
         <>
           <input
             type="text"
@@ -44,9 +45,16 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, onEdit, b
             ref={inputRef}
             className="todo-input edit"
           />
-          <button className="todo-button edit">{buttonDescription}</button>
+          <button type="submit" className="todo-button edit">
+            {buttonDescription}
+          </button>
+          {/* Show cancel button when editing */}
+          <button type="button" onClick={onCancel} className="todo-button cancel">
+            Cancel
+          </button>
         </>
       ) : (
+        // Render add form
         <>
           <input
             type="text"
@@ -56,7 +64,9 @@ const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, onEdit, b
             ref={inputRef}
             className="todo-input"
           />
-          <button className="todo-button">Add todo</button>
+          <button type="submit" className="todo-button">
+            Add todo
+          </button>
         </>
       )}
     </form>
