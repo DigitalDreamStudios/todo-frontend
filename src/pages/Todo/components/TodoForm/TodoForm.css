@@ -45,3 +45,22 @@
     text-decoration: line-through;
     opacity: 0.4;
 }
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+    .todo-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .todo-input {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .todo-button {
+        width: 100%;
+        max-width: 100%;
+    }
+}
