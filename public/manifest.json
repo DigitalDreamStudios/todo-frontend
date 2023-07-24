@@ -1,19 +1,20 @@
 {
-    "id": "link.evildev.todo-client",
-    "name": "To do List",
-    "short_name": "Todo",
+    "name": "ToDo App",
+    "short_name": "ToDo",
+    "description": "A sophisticated task management web application designed to streamline your daily workflow. Effortlessly organize your activities, set reminders, and stay on top of your to-do list with ease. Maximize productivity and maintain impeccable organization in your life with ToDo. Empower yourself to accomplish more, one task at a time.",
+    "lang": "en-US",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "#ffffff",
+    "background_color": "#a7bcff",
+    "scope": "/",
+    "id": "/",
     "icons": [
         {
-            "src": "tasks.png",
+            "src": "favicon.png",
             "sizes": "512x512",
             "type": "image/png"
         }
-    ],
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "description": "To do List Web App",
-    "theme_color": "#ffffff",
-    "scope": "/",
-    "lang": "en-US"
+    ]
 }
