@@ -1,10 +1,10 @@
 import axios from "axios";
-import { IRegisterRequest } from "../models/IRegisterRequest.interface";
-import { APIResponse } from "../../../models/APIResponse.interface";
+import { RegisterRequest } from "../models/RegisterRequest.interface";
+import { ApiResponse } from "../../../models/ApiResponse.type";
 
 
 export default class SignUpService {
-    async postRegister(data: IRegisterRequest): Promise<APIResponse> {
+    async postRegister(data: RegisterRequest): Promise<ApiResponse> {
         try {
             const res = await axios.post(`auth/register`, data);
             return res.data;

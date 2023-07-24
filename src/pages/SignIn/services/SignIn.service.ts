@@ -1,9 +1,9 @@
 import axios from "axios";
-import { ILoginRequest } from "../models/ILoginRequest.interface";
-import { APIResponse } from "../../../models/APIResponse.interface";
+import { LoginRequest } from "../models/LoginRequest.interface";
+import { ApiResponse } from "../../../models/ApiResponse.type";
 
 export default class SignInService {
-    async postLogin(data: ILoginRequest): Promise<APIResponse> {
+    async postLogin(data: LoginRequest): Promise<ApiResponse> {
         try {
             const res = await axios.post(`auth/login`, data);
             return res.data;

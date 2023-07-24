@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { IRegisterRequest } from './models/IRegisterRequest.interface';
+import { RegisterRequest } from './models/RegisterRequest.interface';
 import SignUpService from './services/SignUp.service';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,7 +32,7 @@ function SignUp() {
         const confirmation = data.get("confirmation") as string;
 
         // Create a data object that matches the IRegisterRequest interface
-        const requestData: IRegisterRequest = {
+        const requestData: RegisterRequest = {
             username,
             firstName,
             lastName,
