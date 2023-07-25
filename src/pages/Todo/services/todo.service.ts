@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { Todo } from '../models/todo.type';
 import { TodoRequest } from "../models/TodoRequest.type";
 import { ApiResponse } from "../../../models/ApiResponse.type";
+import { updateSessionStorageTodos } from "../helpers/storage.helper";
 
 export class TodoService {
     private readonly BASE_URL = '/todo';
@@ -12,13 +13,16 @@ export class TodoService {
         try {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
             const res: AxiosResponse<ApiResponse> = await axios.get(this.BASE_URL, { headers });
-            
+
             const todos = res.data.data.map((todo: Todo) => ({
                 id: todo.id,
                 title: todo.title,
                 description: todo.description,
                 completed: todo.completed,
             }));
+
+            // Save todos to sessionStorage
+            updateSessionStorageTodos(todos);
             return todos;
         } catch (error: any) {
             if (error.response && error.response.status === 404) {
@@ -40,13 +44,20 @@ export class TodoService {
         }
         try {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            const res: AxiosResponse<Todo> = await axios.post(this.BASE_URL, todo, { headers });
+            const res: AxiosResponse<ApiResponse> = await axios.post(this.BASE_URL, todo, { headers });
             const newTodo: Todo = {
-                id: res.data.id,
-                title: res.data.title,
-                description: res.data.description,
-                completed: res.data.completed,
+                id: res.data.data.id,
+                title: res.data.data.title,
+                description: res.data.data.description,
+                completed: res.data.data.completed,
             };
+
+            // Update sessionStorage after adding new todo
+            const todosFromSession = sessionStorage.getItem('todos');
+            let todos: Todo[] = todosFromSession ? JSON.parse(todosFromSession) : [];
+            todos.push(newTodo);
+            updateSessionStorageTodos(todos);
+
             toast.success('To do added successfully!', {
                 autoClose: 500,
             });
@@ -63,6 +74,15 @@ export class TodoService {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
             await axios.delete(`${this.BASE_URL}/${_id}`, { headers });
             toast.success('To do removed successfully!', { autoClose: 500 });
+
+            // Update sessionStorage after removing todo
+            const todosFromSession = sessionStorage.getItem('todos');
+            if (todosFromSession) {
+                let todos: Todo[] = JSON.parse(todosFromSession);
+                todos = todos.filter(todo => todo.id !== _id);
+                updateSessionStorageTodos(todos);
+            }
+
             return true;
         } catch (error) {
             return false;
@@ -81,13 +101,25 @@ export class TodoService {
             const newStatus = !currentStatus; // toggle the current status
 
             // PATCH the new status to the API
-            const res: AxiosResponse<Todo> = await axios.patch(`${this.BASE_URL}/${_id}`, { status: newStatus }, { headers });
+            const res: AxiosResponse<ApiResponse> = await axios.patch(`${this.BASE_URL}/${_id}`, { status: newStatus }, { headers });
             const updatedTodo: Todo = {
-                id: res.data.id,
-                title: res.data.title,
-                description: res.data.description,
-                completed: res.data.completed,
+                id: res.data.data.id,
+                title: res.data.data.title,
+                description: res.data.data.description,
+                completed: res.data.data.completed,
             };
+
+            // Update sessionStorage after completing todo
+            const todosFromSession = sessionStorage.getItem('todos');
+            if (todosFromSession) {
+                const todos: Todo[] = JSON.parse(todosFromSession);
+                const todoIndex = todos.findIndex(todo => todo.id === _id);
+                if (todoIndex !== -1) {
+                    todos[todoIndex].completed = newStatus;
+                    updateSessionStorageTodos(todos);
+                }
+            }
+
             toast.success(
                 'To do completed successfully!', {
                 autoClose: 500
@@ -109,6 +141,18 @@ export class TodoService {
                 description: res.data.description,
                 completed: res.data.completed,
             };
+
+            // Update sessionStorage after editing todo
+            const todosFromSession = sessionStorage.getItem('todos');
+            if (todosFromSession) {
+                const todos: Todo[] = JSON.parse(todosFromSession);
+                const todoIndex = todos.findIndex(t => t.id === todo.id);
+                if (todoIndex !== -1) {
+                    todos[todoIndex].description = todo.description;
+                    updateSessionStorageTodos(todos);
+                }
+            }
+
             toast.success(
                 'To do updated successfully!', {
                 autoClose: 500

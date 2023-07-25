@@ -6,34 +6,46 @@ import './TodoList.css';
 import { TodoService } from '../../services/todo.service';
 import { toast } from 'react-toastify';
 import { Todo } from '../../models/todo.type';
+import { getSessionStorageTodos } from '../../helpers/storage.helper';
 
 const TodoList = (props: { token: string | null, userId: number | null }) => {
+  const [todosDb, setTodosDb] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const todoService = new TodoService();
 
   useEffect(() => {
-    // Fetch todos on component mount if props.token is not null
     if (props.token !== null) {
       fetchTodos();
     }
-  }, [props.token]);
+  }, [props.token] || [sessionStorage.getItem('todos')]);
 
   const fetchTodos = async () => {
     try {
       setLoading(true);
       setError(null);
       const fetchedTodos = await todoService.getTodo(props.token);
-      // TODO: Update the todos state with the fetched todos
-
-      setTodos(fetchedTodos);
+      setTodosDb(fetchedTodos); // Update the todos state with the fetched todos
     } catch (error) {
       setError('Failed to fetch todos.');
     } finally {
       setLoading(false);
     }
   };
+
+  const updateFetch = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const fetchedTodos = getSessionStorageTodos();
+      setTodosDb(fetchedTodos); // Update the todos state with the fetched todos
+    } catch (error) {
+      setError('Failed to fetch todos.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const handleCompleteTodo = async (todoId: string) => {
     try {
@@ -78,7 +90,7 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
       ) : error ? (
         <div>{error}</div>
       ) : (
-        todos.map((todo) => (
+        todosDb.map((todo) => (
           <div className={`todo-row ${todo.completed ? 'complete' : ''}`} key={todo.id}>
             <div onClick={() => handleCompleteTodo && handleCompleteTodo(todo.id)}>
               {todo.title}
