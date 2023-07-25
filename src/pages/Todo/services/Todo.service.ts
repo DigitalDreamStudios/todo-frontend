@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { Todo } from '../models/todo.type';
+import { Todo } from '../models/Todo.type';
 import { TodoRequest } from "../models/TodoRequest.type";
 import { ApiResponse } from "../../../models/ApiResponse.type";
-import { updateSessionStorageTodos } from "../helpers/storage.helper";
+import { updateSessionStorageTodos } from "../helpers/Storage.helper";
 
 export class TodoService {
     private readonly BASE_URL = '/todo';

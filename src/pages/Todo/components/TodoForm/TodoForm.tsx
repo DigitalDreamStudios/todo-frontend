@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react';
-import { TodoService } from '../../services/todo.service';
+import { TodoService } from '../../services/Todo.service';
 import './TodoForm.css';
 import { TodoRequest } from '../../models/TodoRequest.type';
 import { toast } from 'react-toastify';

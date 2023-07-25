@@ -1,4 +1,4 @@
-import { Todo } from "../models/todo.type";
+import { Todo } from "../models/Todo.type";
 
 // Helper function to update the todos in sessionStorage
 function updateSessionStorageTodos(todos: Todo[]): void {

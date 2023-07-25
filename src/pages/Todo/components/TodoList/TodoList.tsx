@@ -3,10 +3,10 @@ import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 import './TodoList.css';
-import { TodoService } from '../../services/todo.service';
+import { TodoService } from '../../services/Todo.service';
 import { toast } from 'react-toastify';
-import { Todo } from '../../models/todo.type';
-import { getSessionStorageTodos } from '../../helpers/storage.helper';
+import { Todo } from '../../models/Todo.type';
+import { getSessionStorageTodos } from '../../helpers/Storage.helper';
 
 const TodoList = (props: { token: string | null, userId: number | null }) => {
   const [todosDb, setTodosDb] = useState<Todo[]>([]);
