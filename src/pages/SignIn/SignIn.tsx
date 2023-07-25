@@ -36,7 +36,7 @@ function SignIn() {
             updateToken(responseData.data.access_token);
 
             // Assuming the login was successful, navigate to the dashboard page
-            navigate('/dashboard', { replace: true });
+            navigate('/', { replace: true });
         } catch (error) {
             // Handle error appropriately (e.g., display an error message)
             toast.error('Wrogn username or password');

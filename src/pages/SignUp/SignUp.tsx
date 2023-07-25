@@ -16,9 +16,16 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PasswordField from '../../components/PasswordField';
 import { TextField } from '@mui/material';
+import zxcvbn from 'zxcvbn';
 
 function SignUp() {
     const navigate = useNavigate();
+
+    const validatePasswordStrength = (password: string) => {
+        const minPasswordScore = 3; // You can adjust this value based on your requirements
+        const passwordScore = zxcvbn(password).score;
+        return passwordScore >= minPasswordScore;
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -31,6 +38,12 @@ function SignUp() {
         const password = data.get("password") as string;
         const confirmation = data.get("confirmation") as string;
 
+        // Validate required fields
+        if (!username || !firstName || !lastName || !email || !password || !confirmation) {
+            toast.error("Please fill in all the required fields");
+            return;
+        }
+
         // Create a data object that matches the IRegisterRequest interface
         const requestData: RegisterRequest = {
             username,
@@ -40,6 +53,14 @@ function SignUp() {
             password,
         };
 
+        // Validate password strength
+        const isPasswordValid = validatePasswordStrength(password);
+        if (!isPasswordValid) {
+            toast.error("Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.");
+            return;
+        }
+
+        // Check if passwords match
         if (password !== confirmation) {
             toast.error("Passwords do not match");
             return;
