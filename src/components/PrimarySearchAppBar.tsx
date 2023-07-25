@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -65,6 +66,18 @@ export default function PrimarySearchAppBar() {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    const handleSidebarOpen = () => {
+        toast.info('Sidebar is not implemented yet.');
+    };
+
+    const handleEmailClick = () => {
+        toast.info('No emails yet.');
+    };
+
+    const handleNotificationClick = () => {
+        toast.info('No notifications yet.');
+    };
+
     const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -99,7 +112,7 @@ export default function PrimarySearchAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose} component={Link} to="/login">Get Started</MenuItem>
+            <MenuItem component={Link} to="/login" onClick={handleMenuClose}>Get Started</MenuItem>
         </Menu>
     );
 
@@ -121,7 +134,7 @@ export default function PrimarySearchAppBar() {
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <IconButton size="large" aria-label="show 0 new mails" color="inherit">
+                <IconButton size="large" aria-label="show 0 new mails" color="inherit" onClick={handleEmailClick}>
                     <Badge badgeContent={0} color="error">
                         <MailIcon />
                     </Badge>
@@ -132,15 +145,14 @@ export default function PrimarySearchAppBar() {
                 <IconButton
                     size="large"
                     aria-label="show 0 new notifications"
-                    color="inherit"
-                >
+                    color="inherit" onClick={handleNotificationClick}>
                     <Badge badgeContent={0} color="error">
                         <NotificationsIcon />
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem onClick={handleProfileMenuOpen}>
+            <MenuItem component={Link} to="/login" onClick={handleMobileMenuClose}>
                 <IconButton
                     size="large"
                     aria-label="account of current user"
@@ -150,7 +162,7 @@ export default function PrimarySearchAppBar() {
                 >
                     <AccountCircle />
                 </IconButton>
-                <p>Profile</p>
+                <p>Get Started</p>
             </MenuItem>
         </Menu>
     );
@@ -165,6 +177,7 @@ export default function PrimarySearchAppBar() {
                         color="inherit"
                         aria-label="open drawer"
                         sx={{ mr: 2 }}
+                        onClick={handleSidebarOpen}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -189,7 +202,7 @@ export default function PrimarySearchAppBar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 0 new mails" color="inherit">
+                        <IconButton size="large" aria-label="show 0 new mails" color="inherit" onClick={handleEmailClick}>
                             <Badge badgeContent={0} color="error">
                                 <MailIcon />
                             </Badge>
@@ -198,7 +211,7 @@ export default function PrimarySearchAppBar() {
                             size="large"
                             aria-label="show 0 new notifications"
                             color="inherit"
-                        >
+                            onClick={handleNotificationClick}>
                             <Badge badgeContent={0} color="error">
                                 <NotificationsIcon />
                             </Badge>

@@ -1,82 +1,92 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { TodoType } from '../types/todo.type';
-import { Todo } from "../interfaces/todo.interface";
+import { Todo } from '../models/todo.type';
+import { TodoRequest } from "../models/TodoRequest.type";
+import { ApiResponse } from "../../../models/ApiResponse.type";
 
 export class TodoService {
-    // GET METHOD
-    async getTodo(): Promise<Todo[]> {
+    private readonly BASE_URL = '/todo';
+
+    // GET METHOD    
+    async getTodo(token: string | null): Promise<Todo[]> {
         try {
-            const res = await axios.get('/todo');
-            const todos = res.data.map((todo: Todo) => ({
-                _id: todo._id,
+            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            const res: AxiosResponse<ApiResponse> = await axios.get(this.BASE_URL, { headers });
+            
+            const todos = res.data.data.map((todo: Todo) => ({
+                id: todo.id,
+                title: todo.title,
                 description: todo.description,
-                status: todo.status,
+                completed: todo.completed,
             }));
             return todos;
         } catch (error: any) {
             if (error.response && error.response.status === 404) {
                 return [];
             } else {
-                console.log(error);
+                toast.error('Something went wrong while fetching the todos!');
                 return [];
             }
         }
     };
 
     // POST METHOD
-    async addTodo(todo: TodoType): Promise<Todo | undefined> {
-        if (!todo.description.trim()) {
+    async addTodo(token: string | null, todo: TodoRequest): Promise<Todo | undefined> {
+        if (!todo.title.trim()) {
             toast.error('Please enter a valid Todo!', {
                 autoClose: 500,
             });
             return undefined;
         }
         try {
-            const res = await axios.post('/todo', todo);
+            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            const res: AxiosResponse<Todo> = await axios.post(this.BASE_URL, todo, { headers });
             const newTodo: Todo = {
-                _id: res.data.todo._id,
-                description: res.data.todo.description,
-                status: res.data.todo.status,
+                id: res.data.id,
+                title: res.data.title,
+                description: res.data.description,
+                completed: res.data.completed,
             };
             toast.success('To do added successfully!', {
                 autoClose: 500,
             });
             return newTodo;
         } catch (error) {
-            console.error(error);
+            toast.error('Something went wrong while adding the todo!');
             return undefined;
         }
     };
 
     // DELETE METHOD
-    async removeTodo(_id: string): Promise<boolean> {
+    async removeTodo(token: string | null, _id: string): Promise<boolean> {
         try {
-            await axios.delete(`/todo/?id=${_id}`);
+            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            await axios.delete(`${this.BASE_URL}/${_id}`, { headers });
             toast.success('To do removed successfully!', { autoClose: 500 });
             return true;
         } catch (error) {
-            console.log(error);
             return false;
         }
     };
 
     // PATCH METHOD
-    async completeTodo(_id: string): Promise<Todo | undefined> {
+    async completeTodo(token: string | null, _id: string): Promise<Todo | undefined> {
         try {
-            const response = await axios.get(`/todo/?id=${_id}`);
-            const currentStatus = response.data?.status;
+            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            const response: AxiosResponse<Todo> = await axios.get(`${this.BASE_URL}/${_id}`, { headers });
+            const currentStatus = response.data?.completed;
             if (currentStatus === undefined) {
                 return undefined;
             }
             const newStatus = !currentStatus; // toggle the current status
 
             // PATCH the new status to the API
-            const res = await axios.patch(`/todo/?id=${_id}`, { status: newStatus });
+            const res: AxiosResponse<Todo> = await axios.patch(`${this.BASE_URL}/${_id}`, { status: newStatus }, { headers });
             const updatedTodo: Todo = {
-                _id: res.data.todo._id,
-                description: res.data.todo.description,
-                status: res.data.todo.status,
+                id: res.data.id,
+                title: res.data.title,
+                description: res.data.description,
+                completed: res.data.completed,
             };
             toast.success(
                 'To do completed successfully!', {
@@ -84,21 +94,20 @@ export class TodoService {
             });
             return updatedTodo;
         } catch (error) {
-            console.log(error);
             return undefined;
         }
     };
 
     // PATCH METHOD
-    async editTodo(todo: TodoType): Promise<Todo | undefined> {
+    async editTodo(token: string | null, todo: Todo): Promise<Todo | undefined> {
         try {
-            const res = await axios.patch(`/todo/?id=${todo._id}`, {
-                description: todo.description,
-            });
+            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            const res: AxiosResponse<Todo> = await axios.patch(`${this.BASE_URL}/${todo.id}`, { description: todo.description }, { headers });
             const updatedTodo: Todo = {
-                _id: res.data.todo._id,
-                description: res.data.todo.description,
-                status: res.data.todo.status,
+                id: res.data.id,
+                title: res.data.title,
+                description: res.data.description,
+                completed: res.data.completed,
             };
             toast.success(
                 'To do updated successfully!', {
@@ -106,7 +115,6 @@ export class TodoService {
             });
             return updatedTodo;
         } catch (err) {
-            console.log(err);
             return undefined;
         }
     };

@@ -1,74 +1,54 @@
-import React, { useState, useEffect, useRef, FormEvent } from 'react';
-import { TodoFormProps } from '../../interfaces/todo.interface';
+import { useState, useRef, FormEvent } from 'react';
+import { TodoService } from '../../services/todo.service';
 import './TodoForm.css';
+import { TodoRequest } from '../../models/TodoRequest.type';
+import { toast } from 'react-toastify';
 
-const TodoForm: React.FC<TodoFormProps> = ({ edit, onSubmit, onCancel, onEdit, buttonDescription = 'Save' }) => {
-  const [description, setDescription] = useState<string>(edit?.description || '');
+const TodoForm = (props: { token: string | null; userId: number | null }) => {
+  const todoService = new TodoService();
+  const [title, setTitle] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Focus the input field on component mount
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!edit) {
-      const newTodo = {
-        description,
-        status: false,
-      };
-      onSubmit?.(newTodo);
-      setDescription('');
+
+    if (!title.trim()) {
+      // Validate title input
+      toast.error('Please enter a todo title.');
+      return;
+    }
+
+    const newTodoRequest: TodoRequest = {
+      title,
+      description: '',
+      completed: false,
+      userId: props.userId,
+    };
+
+    const newTodo = await todoService.addTodo(props.token, newTodoRequest);
+
+    if (newTodo) {
+      // Handle successful addition
+      setTitle('');
     } else {
-      const updatedTodo = {
-        _id: edit._id,
-        description,
-        status: edit.status,
-      };
-      onEdit?.(updatedTodo);
-      onSubmit?.({ description: '', status: false });
+      // Handle addition error
+      toast.error('An error occurred while adding the todo.');
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="todo-form">
-      {edit ? (
-        // Render edit form
-        <>
-          <input
-            type="text"
-            placeholder="Update your todo"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            ref={inputRef}
-            className="todo-input edit"
-          />
-          <button type="submit" className="todo-button edit">
-            {buttonDescription}
-          </button>
-          {/* Show cancel button when editing */}
-          <button type="button" onClick={onCancel} className="todo-button cancel">
-            Cancel
-          </button>
-        </>
-      ) : (
-        // Render add form
-        <>
-          <input
-            type="text"
-            placeholder="Add a todo"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            ref={inputRef}
-            className="todo-input"
-          />
-          <button type="submit" className="todo-button">
-            Add todo
-          </button>
-        </>
-      )}
+      <input
+        type="text"
+        placeholder="Add a todo"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        ref={inputRef}
+        className="todo-input"
+      />
+      <button type="submit" className="todo-button">
+        Add todo
+      </button>
     </form>
   );
 };
