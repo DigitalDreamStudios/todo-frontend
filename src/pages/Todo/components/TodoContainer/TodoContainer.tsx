@@ -11,14 +11,13 @@ const TodoContainer: React.FC<{}> = () => {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
 
-  const auth = useAuth();
-  const user = useUser();
+  const { token: authToken } = useAuth();
+  const { userData } = useUser();
 
   useEffect(() => {
-    setToken(auth.token);
-    setUserId(user.userData?.userId || null);
-  }
-    , [auth.token]);
+    setToken(authToken);
+    setUserId(userData?.userId ?? null);
+  }, [authToken, userData]);
 
   return (
     <div className='card-container'>

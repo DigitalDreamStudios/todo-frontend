@@ -1,13 +1,12 @@
-import { useState, useRef, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { TodoService } from '../../services/todo.service';
 import './TodoForm.css';
 import { TodoRequest } from '../../models/TodoRequest.type';
 import { toast } from 'react-toastify';
 
 const TodoForm = (props: { token: string | null; userId: number | null }) => {
-  const todoService = new TodoService();
   const [title, setTitle] = useState('');
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const todoService = new TodoService();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +20,6 @@ const TodoForm = (props: { token: string | null; userId: number | null }) => {
     const newTodoRequest: TodoRequest = {
       title,
       description: '',
-      completed: false,
       userId: props.userId,
     };
 
@@ -43,7 +41,6 @@ const TodoForm = (props: { token: string | null; userId: number | null }) => {
         placeholder="Add a todo"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        ref={inputRef}
         className="todo-input"
       />
       <button type="submit" className="todo-button">

@@ -7,12 +7,11 @@ import { TodoService } from '../../services/todo.service';
 import { toast } from 'react-toastify';
 import { Todo } from '../../models/todo.type';
 
-const todoService = new TodoService();
-
 const TodoList = (props: { token: string | null, userId: number | null }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const todoService = new TodoService();
 
   useEffect(() => {
     // Fetch todos on component mount if props.token is not null

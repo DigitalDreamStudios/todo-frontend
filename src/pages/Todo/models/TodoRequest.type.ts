@@ -1,6 +1,6 @@
 export type TodoRequest = {
     title: string;
     description: string;
-    completed: boolean;
+    completed?: boolean;
     userId: number | null;
 }
