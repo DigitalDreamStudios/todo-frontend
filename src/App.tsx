@@ -14,7 +14,6 @@ function App() {
   return (
     <div className="App">
       <PrimarySearchAppBar />
-      <BrowserRouter>
         <Routes>
           <Route index element={<TodoContainer />} />
           <Route path="/" element={auth.token ? <TodoContainer /> : <Navigate to="/login" />} />
@@ -24,7 +23,6 @@ function App() {
           <Route path="register" element={auth.token ? <Navigate to="/" /> : <SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
       {/* <StickyFooter /> */}
     </div>
   )
