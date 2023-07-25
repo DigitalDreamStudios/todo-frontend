@@ -1,3 +1,4 @@
+/* Common styles for all screen sizes */
 .todo-container {
     display: flex;
     flex-direction: row;
@@ -11,53 +12,27 @@
     padding-right: 1rem;
 }
 
-.todo-list::-webkit-scrollbar-track {
-    background: #a7abbd;
-    border-radius: 10px;
-}
-
-.todo-list::-webkit-scrollbar {
-    width: 10px;
-    background: #000000;
-}
-
-.todo-list::-webkit-scrollbar-thumb {
-    background: #441196;
-    border-radius: 10px;
-}
-
-
 .todo-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 4px auto;
     color: #fff;
-    background: linear-gradient(90deg,
-            rgba(255, 118, 20, 1) 0%,
-            rgba(255, 84, 17, 1) 100%);
-
+    background: linear-gradient(90deg, rgba(255, 118, 20, 1) 0%, rgba(255, 84, 17, 1) 100%);
     padding: 16px;
     border-radius: 5px;
-
 }
 
 .todo-row:nth-child(4n + 1) {
-    background: linear-gradient(90deg,
-            rgba(93, 12, 255, 1) 0%,
-            rgba(155, 0, 250, 1) 100%);
+    background: linear-gradient(90deg, rgba(93, 12, 255, 1) 0%, rgba(155, 0, 250, 1) 100%);
 }
 
 .todo-row:nth-child(4n + 2) {
-    background: linear-gradient(90deg,
-            rgba(255, 12, 241, 1) 0%,
-            rgba(250, 0, 135, 1) 100%);
+    background: linear-gradient(90deg, rgba(255, 12, 241, 1) 0%, rgba(250, 0, 135, 1) 100%);
 }
 
 .todo-row:nth-child(4n + 3) {
-    background: linear-gradient(90deg,
-            rgba(20, 159, 255, 1) 0%,
-            rgba(17, 122, 255, 1) 100%);
+    background: linear-gradient(90deg, rgba(20, 159, 255, 1) 0%, rgba(17, 122, 255, 1) 100%);
 }
 
 .icons {
@@ -83,4 +58,15 @@
 .todo-input.edit {
     border: 2px solid #161a2b;
     background: #161a2b;
+}
+
+/* Media queries for responsive design */
+@media only screen and (max-width: 600px) {
+    .todo-container {
+        flex-direction: column;
+    }
+
+    .todo-list {
+        width: 100%;
+    }
 }
