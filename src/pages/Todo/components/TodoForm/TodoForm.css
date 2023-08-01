@@ -30,18 +30,26 @@
     text-transform: capitalize;
 }
 
-.todo-input.edit {
-    border: 2px solid #149fff;
-}
-
-.todo-button.edit {
-    background: linear-gradient(90deg,
-            rgba(20, 159, 255, 1) 0%,
-            rgba(17, 122, 255, 1) 100%);
-    padding: 16px 22px;
-}
-
 .complete {
     text-decoration: line-through;
     opacity: 0.4;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+    .todo-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .todo-input {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .todo-button {
+        width: 100%;
+        max-width: 100%;
+    }
 }
