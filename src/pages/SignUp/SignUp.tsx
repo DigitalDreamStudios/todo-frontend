@@ -78,7 +78,11 @@ function SignUp() {
         }
     };
 
-    const defaultTheme = createTheme({});
+    const defaultTheme = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
 
     return (
         <ThemeProvider theme={defaultTheme}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,6 +22,7 @@ import { TextField } from '@mui/material';
 function SignIn() {
     const navigate = useNavigate();
     const { updateToken } = useAuth();
+    const [rememberMe, setRememberMe] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -43,8 +44,15 @@ function SignIn() {
         }
     };
 
-    // Create a new dark theme
-    const defaultTheme = createTheme({});
+    const handleRememberMeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRememberMe(event.target.checked);
+    };
+
+    const defaultTheme = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -77,7 +85,12 @@ function SignIn() {
                         />
                         <PasswordField label="Password" autoComplete="current-password" />
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
+                            control={<Checkbox
+                                value="remember"
+                                color="primary"
+                                checked={rememberMe}
+                                onChange={handleRememberMeChange}
+                            />}
                             label="Remember me"
                         />
                         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
