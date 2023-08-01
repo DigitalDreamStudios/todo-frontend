@@ -137,13 +137,8 @@ export class TodoService {
     async editTodo(token: string | null, todo: Todo): Promise<Todo | undefined> {
         try {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            const res: AxiosResponse<Todo> = await axios.patch(`${this.BASE_URL}/${todo.id}`, { description: todo.description }, { headers });
-            const updatedTodo: Todo = {
-                id: res.data.id,
-                title: res.data.title,
-                description: res.data.description,
-                completed: res.data.completed,
-            };
+            const res: AxiosResponse<ApiResponse> = await axios.patch(`${this.BASE_URL}/${todo.id}`, todo, { headers });
+            const updatedTodo: Todo = res.data.data;
 
             // Update sessionStorage after editing todo
             const todosFromSession = sessionStorage.getItem('todos');
@@ -151,7 +146,7 @@ export class TodoService {
                 const todos: Todo[] = JSON.parse(todosFromSession);
                 const todoIndex = todos.findIndex(t => t.id === todo.id);
                 if (todoIndex !== -1) {
-                    todos[todoIndex].description = todo.description;
+                    todos[todoIndex] = todo;
                     updateSessionStorageTodos(todos);
                 }
             }

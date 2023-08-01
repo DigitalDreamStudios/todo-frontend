@@ -4,10 +4,10 @@ import { TiEdit } from 'react-icons/ti';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 import './TodoList.css';
 import { TodoService } from '../../services/Todo.service';
-import { toast } from 'react-toastify';
 import { Todo } from '../../models/Todo.type';
 import { getSessionStorageTodos } from '../../helpers/Storage.helper';
 import { useSession } from '../../context/SessionContext';
+import EditModal from '../EditModal/EditModal';
 
 const TodoList = (props: { token: string | null, userId: number | null }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -15,6 +15,10 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
   const [error, setError] = useState<string | null>(null);
   const todoService = new TodoService();
   const session = useSession();
+
+  // States to handle the modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedTodo, setEditedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     if (props.token !== null) {
@@ -42,37 +46,43 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
 
   const handleCompleteTodo = async (todoId: string) => {
     try {
-      setLoading(true);
       setError(null);
       if (await todoService.completeTodo(props.token, todoId)) session.updateTodos();
     } catch (error) {
       setError('Failed to complete the todo.');
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleEditTodo = async (editedTodo: Todo) => {
     try {
-      setLoading(true);
       setError(null);
-      if (await todoService.editTodo(props.token, editedTodo)) session.updateTodos();
+      setEditedTodo(editedTodo);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Failed to update the todo.', error);
+    }
+  };
+
+  const handleModalSave = async (updatedTodo: Todo) => {
+    try {
+      setError(null);
+      if (updatedTodo) {
+        if (await todoService.editTodo(props.token, updatedTodo)) {
+          session.updateTodos();
+          setIsModalOpen(false);
+        }
+      }
     } catch (error) {
       setError('Failed to update the todo.');
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleRemoveTodo = async (todoId: string) => {
     try {
-      setLoading(true);
       setError(null);
       if (await todoService.removeTodo(props.token, todoId)) session.updateTodos();
     } catch (error) {
       setError('Failed to remove the todo.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -82,6 +92,8 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
         <div>Loading...</div>
       ) : error ? (
         <div>{error}</div>
+      ) : todos.length === 0 ? ( // Check if there are no todos to display
+        <div>No todos to fetch.</div>
       ) : (
         todos.map((todo) => (
           <div className={`todo-row ${todo.completed ? 'complete' : ''}`} key={todo.id}>
@@ -89,11 +101,11 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
               {todo.title}
             </div>
             <div className="icons">
+              <TiEdit onClick={() => handleEditTodo && handleEditTodo(todo)} className="edit-icon" />
               <AiOutlineCheckCircle
                 onClick={() => handleCompleteTodo && handleCompleteTodo(todo.id)}
                 className="complete-icon"
               />
-              <TiEdit onClick={() => handleEditTodo && handleEditTodo(todo)} className="edit-icon" />
               <RiCloseCircleLine
                 onClick={() => handleRemoveTodo && handleRemoveTodo(todo.id)}
                 className="delete-icon"
@@ -102,8 +114,17 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
           </div>
         ))
       )}
+      {isModalOpen && (
+        <EditModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          editedTodo={editedTodo}
+          onModalSave={handleModalSave}
+        />
+      )}
     </div>
   );
+
 };
 
 export default TodoList;
