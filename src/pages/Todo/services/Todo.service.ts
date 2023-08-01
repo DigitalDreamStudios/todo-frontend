@@ -69,17 +69,17 @@ export class TodoService {
     };
 
     // DELETE METHOD
-    async removeTodo(token: string | null, _id: string): Promise<boolean> {
+    async removeTodo(token: string | null, id: string): Promise<boolean> {
         try {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            await axios.delete(`${this.BASE_URL}/${_id}`, { headers });
+            await axios.delete(`${this.BASE_URL}/${id}`, { headers });
             toast.success('To do removed successfully!', { autoClose: 500 });
 
             // Update sessionStorage after removing todo
             const todosFromSession = sessionStorage.getItem('todos');
             if (todosFromSession) {
                 let todos: Todo[] = JSON.parse(todosFromSession);
-                todos = todos.filter(todo => todo.id !== _id);
+                todos = todos.filter(todo => todo.id !== id);
                 updateSessionStorageTodos(todos);
             }
 
@@ -90,30 +90,32 @@ export class TodoService {
     };
 
     // PATCH METHOD
-    async completeTodo(token: string | null, _id: string): Promise<Todo | undefined> {
+    async completeTodo(token: string | null, id: string): Promise<Todo | undefined> {
         try {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            const response: AxiosResponse<Todo> = await axios.get(`${this.BASE_URL}/${_id}`, { headers });
-            const currentStatus = response.data?.completed;
-            if (currentStatus === undefined) {
-                return undefined;
-            }
-            const newStatus = !currentStatus; // toggle the current status
+
+            // Fetch the current todo
+            const response: AxiosResponse<ApiResponse> = await axios.get(`${this.BASE_URL}/filter?id=${id}`, { headers });
+            const currentTodo = response.data.data;
+
+            // Toggle the completed status
+            const newStatus = !currentTodo.completed;
 
             // PATCH the new status to the API
-            const res: AxiosResponse<ApiResponse> = await axios.patch(`${this.BASE_URL}/${_id}`, { status: newStatus }, { headers });
-            const updatedTodo: Todo = {
-                id: res.data.data.id,
-                title: res.data.data.title,
-                description: res.data.data.description,
-                completed: res.data.data.completed,
-            };
+            const res: AxiosResponse<ApiResponse> = await axios.patch(
+                `${this.BASE_URL}/${id}`,
+                { completed: newStatus }, // Update only the 'completed' property
+                { headers }
+            );
+
+            // Return the updated todo
+            const updatedTodo: Todo = res.data.data;
 
             // Update sessionStorage after completing todo
             const todosFromSession = sessionStorage.getItem('todos');
             if (todosFromSession) {
                 const todos: Todo[] = JSON.parse(todosFromSession);
-                const todoIndex = todos.findIndex(todo => todo.id === _id);
+                const todoIndex = todos.findIndex(todo => todo.id === id);
                 if (todoIndex !== -1) {
                     todos[todoIndex].completed = newStatus;
                     updateSessionStorageTodos(todos);
@@ -124,6 +126,7 @@ export class TodoService {
                 'To do completed successfully!', {
                 autoClose: 500
             });
+
             return updatedTodo;
         } catch (error) {
             return undefined;

@@ -20,7 +20,7 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
     if (props.token !== null) {
       fetchTodos();
     }
-  }, [props.token]);
+  }, []);
 
   useEffect(() => {
     // Update todos from sessionStorage
@@ -44,7 +44,7 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
     try {
       setLoading(true);
       setError(null);
-      toast.info(`Completing todo ${todoId}...`);
+      if (await todoService.completeTodo(props.token, todoId)) session.updateTodos();
     } catch (error) {
       setError('Failed to complete the todo.');
     } finally {
@@ -56,7 +56,7 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
     try {
       setLoading(true);
       setError(null);
-      toast.info(`Updating todo ${editedTodo.id}...`);
+      if (await todoService.editTodo(props.token, editedTodo)) session.updateTodos();
     } catch (error) {
       setError('Failed to update the todo.');
     } finally {
@@ -68,7 +68,7 @@ const TodoList = (props: { token: string | null, userId: number | null }) => {
     try {
       setLoading(true);
       setError(null);
-      toast.info(`Removing todo ${todoId}...`);
+      if (await todoService.removeTodo(props.token, todoId)) session.updateTodos();
     } catch (error) {
       setError('Failed to remove the todo.');
     } finally {
