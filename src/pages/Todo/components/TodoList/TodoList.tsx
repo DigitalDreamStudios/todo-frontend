@@ -24,7 +24,7 @@ const TodoList = (props: { token: string | null }) => {
 
   useEffect(() => {
     if (props.token) fetchTodos();
-  }, []);
+  }, [props.token]);
 
   useEffect(() => {
     // Update todos from sessionStorage
