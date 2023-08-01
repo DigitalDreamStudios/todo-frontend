@@ -9,9 +9,10 @@ import TodoList from '../TodoList/TodoList';
 import { SessionProvider } from '../../context/SessionContext';
 
 const TodoContainer: React.FC<{}> = () => {
+  // Container states
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
-
+  // Context hooks
   const { token: authToken } = useAuth();
   const { userData } = useUser();
 
@@ -26,7 +27,7 @@ const TodoContainer: React.FC<{}> = () => {
         <div className='card'>
           <h1>What's the Plan for Today?</h1>
           <TodoForm token={token} userId={userId} />
-          <TodoList token={token} userId={userId} />
+          <TodoList token={token} />
           <ToastContainer />
         </div>
       </div>

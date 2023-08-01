@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp/SignUp';
 import Footer from './components/Footer/Footer';
 
 function App() {
+  // Context hook
   const auth = useAuth();
 
   return (

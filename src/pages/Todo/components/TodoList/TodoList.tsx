@@ -9,21 +9,21 @@ import { getSessionStorageTodos } from '../../helpers/Storage.helper';
 import { useSession } from '../../context/SessionContext';
 import EditModal from '../EditModal/EditModal';
 
-const TodoList = (props: { token: string | null, userId: number | null }) => {
+const TodoList = (props: { token: string | null }) => {
+  // List states
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const todoService = new TodoService();
-  const session = useSession();
-
-  // States to handle the modal
+  // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedTodo, setEditedTodo] = useState<Todo | null>(null);
+  // Context
+  const session = useSession();
+  // Service
+  const todoService = new TodoService();
 
   useEffect(() => {
-    if (props.token !== null) {
-      fetchTodos();
-    }
+    if (props.token) fetchTodos();
   }, []);
 
   useEffect(() => {

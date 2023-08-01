@@ -6,9 +6,12 @@ import { toast } from 'react-toastify';
 import { useSession } from '../../context/SessionContext';
 
 const TodoForm = (props: { token: string | null; userId: number | null }) => {
+  // Form states
   const [title, setTitle] = useState('');
-  const todoService = new TodoService();
+  // Context hooks
   const session = useSession();
+  // Service
+  const todoService = new TodoService();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
