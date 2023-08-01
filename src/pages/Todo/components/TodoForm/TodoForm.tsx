@@ -18,7 +18,12 @@ const TodoForm = (props: { token: string | null; userId: number | null }) => {
 
     if (!title.trim()) {
       // Validate title input
-      toast.error('Please enter a todo title.');
+      toast.error('Please enter a todo title.', {
+        // Make it dissapear faster
+        autoClose: 1000,
+        // Prevent duplicate toasts
+        toastId: 'empty-title',
+      });
       return;
     }
 
@@ -36,7 +41,12 @@ const TodoForm = (props: { token: string | null; userId: number | null }) => {
       session.updateTodos()
     } else {
       // Handle addition error
-      toast.error('An error occurred while adding the todo.');
+      toast.error('An error occurred while adding the todo.', {
+        // Make it dissapear faster
+        autoClose: 1000,
+        // Prevent duplicate toasts
+        toastId: 'add-todo-error',
+      });
     }
   };
 

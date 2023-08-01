@@ -28,7 +28,12 @@ export class TodoService {
             if (error.response && error.response.status === 404) {
                 return [];
             } else {
-                toast.error('Something went wrong while fetching the todos!');
+                toast.error('Something went wrong while fetching the todos!', {
+                    // Make it dissapear faster
+                    autoClose: 1000,
+                    // Prevent duplicate toasts
+                    toastId: 'fetch-todos-error',
+                });
                 return [];
             }
         }
@@ -38,7 +43,10 @@ export class TodoService {
     async addTodo(token: string | null, todo: TodoRequest): Promise<Todo | undefined> {
         if (!todo.title.trim()) {
             toast.error('Please enter a valid Todo!', {
-                autoClose: 500,
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'add-todo-error',
             });
             return undefined;
         }
@@ -59,11 +67,19 @@ export class TodoService {
             updateSessionStorageTodos(todos);
 
             toast.success('To do added successfully!', {
-                autoClose: 500,
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'add-todo-success',
             });
             return newTodo;
         } catch (error) {
-            toast.error('Something went wrong while adding the todo!');
+            toast.error('Something went wrong while adding the todo!', {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'add-todo-error',
+            });
             return undefined;
         }
     };
@@ -73,7 +89,12 @@ export class TodoService {
         try {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
             await axios.delete(`${this.BASE_URL}/${id}`, { headers });
-            toast.success('To do removed successfully!', { autoClose: 500 });
+            toast.success('To do removed successfully!', {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'remove-todo-success',
+            });
 
             // Update sessionStorage after removing todo
             const todosFromSession = sessionStorage.getItem('todos');
@@ -85,6 +106,12 @@ export class TodoService {
 
             return true;
         } catch (error) {
+            toast.error('Something went wrong while removing the todo!', {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'remove-todo-error',
+            });
             return false;
         }
     };
@@ -124,7 +151,10 @@ export class TodoService {
 
             toast.success(
                 'To do completed successfully!', {
-                autoClose: 500
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'complete-todo-success',
             });
 
             return updatedTodo;
@@ -153,7 +183,10 @@ export class TodoService {
 
             toast.success(
                 'To do updated successfully!', {
-                autoClose: 500
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'edit-todo-success',
             });
             return updatedTodo;
         } catch (err) {

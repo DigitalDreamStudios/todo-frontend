@@ -1,6 +1,7 @@
 import TodoContainer from './pages/Todo/components/TodoContainer/TodoContainer'
 import './App.css'
-import NavBar from './components/NavBar/NavBar'
+import NavBar from './components/NavBar/Guest/NavBar'
+import NavBarLogged from './components/NavBar/Logged/NavBar';
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './context/AuthContext';
 import NotFound from './pages/NotFound/NotFound';
@@ -14,7 +15,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar />
+      {auth.token ? <NavBarLogged /> : <NavBar />}
       <Routes>
         <Route index element={<TodoContainer />} />
         <Route path="/" element={auth.token ? <TodoContainer /> : <Navigate to="/login" />} />

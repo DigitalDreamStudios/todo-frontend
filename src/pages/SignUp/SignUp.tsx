@@ -40,7 +40,12 @@ function SignUp() {
 
         // Validate required fields
         if (!username || !firstName || !lastName || !email || !password || !confirmation) {
-            toast.error("Please fill in all the required fields");
+            toast.error("Please fill in all the required fields", {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: "required-fields-error",
+            });
             return;
         }
 
@@ -56,13 +61,23 @@ function SignUp() {
         // Validate password strength
         const isPasswordValid = validatePasswordStrength(password);
         if (!isPasswordValid) {
-            toast.error("Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.");
+            toast.error("Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.", {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: "password-strength-error",
+            });
             return;
         }
 
         // Check if passwords match
         if (password !== confirmation) {
-            toast.error("Passwords do not match");
+            toast.error("Passwords do not match", {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: "password-match-error",
+            });
             return;
         }
 
@@ -74,7 +89,12 @@ function SignUp() {
             navigate("/login", { replace: true });
         } catch (error) {
             // Handle error appropriately (e.g., display an error message)
-            toast.error("Something went wrong, please try again later");
+            toast.error("Something went wrong, please try again later", {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: "registration-error",
+            });
         }
     };
 

@@ -40,7 +40,12 @@ function SignIn() {
             navigate('/', { replace: true });
         } catch (error) {
             // Handle error appropriately (e.g., display an error message)
-            toast.error('Wrogn username or password');
+            toast.error('Wrogn username or password', {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'login-error',
+            });
         }
     };
 
