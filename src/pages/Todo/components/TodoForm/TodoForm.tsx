@@ -3,10 +3,12 @@ import { TodoService } from '../../services/Todo.service';
 import './TodoForm.css';
 import { TodoRequest } from '../../models/TodoRequest.type';
 import { toast } from 'react-toastify';
+import { useSession } from '../../context/SessionContext';
 
 const TodoForm = (props: { token: string | null; userId: number | null }) => {
   const [title, setTitle] = useState('');
   const todoService = new TodoService();
+  const session = useSession();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ const TodoForm = (props: { token: string | null; userId: number | null }) => {
     if (newTodo) {
       // Handle successful addition
       setTitle('');
+      session.updateTodos()
     } else {
       // Handle addition error
       toast.error('An error occurred while adding the todo.');

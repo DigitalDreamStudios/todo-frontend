@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../../../context/AuthContext';
 import { useUser } from '../../../../context/UserContext';
 import TodoList from '../TodoList/TodoList';
+import { SessionProvider } from '../../context/SessionContext';
 
 const TodoContainer: React.FC<{}> = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -20,14 +21,16 @@ const TodoContainer: React.FC<{}> = () => {
   }, [authToken, userData]);
 
   return (
-    <div className='card-container'>
-      <div className='card'>
-        <h1>What's the Plan for Today?</h1>
-        <TodoForm token={token} userId={userId} />
-        <TodoList token={token} userId={userId} />
-        <ToastContainer />
+    <SessionProvider>
+      <div className='card-container'>
+        <div className='card'>
+          <h1>What's the Plan for Today?</h1>
+          <TodoForm token={token} userId={userId} />
+          <TodoList token={token} userId={userId} />
+          <ToastContainer />
+        </div>
       </div>
-    </div>
+    </SessionProvider>
   );
 };
 
