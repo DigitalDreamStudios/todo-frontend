@@ -23,7 +23,7 @@ function App() {
         <Route path="register" element={auth.token ? <Navigate to="/" /> : <SignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }

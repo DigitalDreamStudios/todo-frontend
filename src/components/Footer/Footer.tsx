@@ -6,51 +6,39 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
 
 export default function Footer() {
     return (
         <ThemeProvider theme={defaultTheme}>
+            <CssBaseline />
             <Box
+                component="footer"
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '25vh', // Changed to 100vh to fill the whole viewport height
+                    py: 2, // Decreased padding on the y-axis
+                    backgroundColor: (theme) =>
+                        theme.palette.mode === 'light'
+                            ? theme.palette.grey[200]
+                            : theme.palette.grey[800],
+                    position: 'fixed',
+                    bottom: 0,
+                    width: '100%',
                 }}
             >
-                <CssBaseline />
-                <Box
-                    component="footer"
-                    sx={{
-                        py: 3,
-                        px: 2,
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[200]
-                                : theme.palette.grey[800],
-                        position: 'fixed', // Added position fixed
-                        bottom: 0, // Added bottom 0
-                        width: '100%', // Added to make sure it spans the whole width
-                    }}
-                >
-                    <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
-                        <Typography variant="body1">
-                            Powered by{' '}
-                            <Link color="inherit" href="https://mui.com/">
-                                DigitalDreams
-                            </Link>
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {'Copyright © '}
-                            {new Date().getFullYear()}{' '}
-                            <Link color="inherit" href="https://mui.com/">
-                                DigitalDreams
-                            </Link>
-                            {'.'}
-                        </Typography>
-                    </Container>
-                </Box>
+                <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" color="text.secondary">
+                        {'Copyright © '}
+                        {new Date().getFullYear()}{' '}
+                        <Link color="inherit" href="https://mui.com/">
+                            DigitalDreams
+                        </Link>
+                        {'.'}
+                    </Typography>
+                </Container>
             </Box>
         </ThemeProvider>
     );
