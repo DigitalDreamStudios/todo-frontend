@@ -3,7 +3,8 @@ import React, { createContext, useState, useEffect, FC } from 'react';
 interface AuthContextType {
     token: string | null;
     checkToken: () => void;
-    updateToken: (newToken: string) => void; // Add this function to update the token
+    updateToken: (newToken: string) => void;
+    removeToken: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -27,13 +28,19 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem('token', newToken);
     };
 
+    // Remove token when user logs out
+    const removeToken = () => {
+        setToken(null);
+        localStorage.removeItem('token');
+    };
+
     // Check token when component is mounted
     useEffect(() => {
         checkToken();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ token, checkToken, updateToken }}>
+        <AuthContext.Provider value={{ token, checkToken, updateToken, removeToken }}>
             {children}
         </AuthContext.Provider>
     );

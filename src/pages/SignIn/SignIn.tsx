@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,12 +16,13 @@ import SignInService from './services/SignIn.service';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../context/AuthContext';
-import PasswordField from '../../components/PasswordField';
+import PasswordField from '../../components/PasswordField/PasswordField';
 import { TextField } from '@mui/material';
 
 function SignIn() {
     const navigate = useNavigate();
     const { updateToken } = useAuth();
+    const [rememberMe, setRememberMe] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -39,12 +40,24 @@ function SignIn() {
             navigate('/', { replace: true });
         } catch (error) {
             // Handle error appropriately (e.g., display an error message)
-            toast.error('Wrogn username or password');
+            toast.error('Wrogn username or password', {
+                // Make it dissapear faster
+                autoClose: 1000,
+                // Prevent duplicate toasts
+                toastId: 'login-error',
+            });
         }
     };
 
-    // Create a new dark theme
-    const defaultTheme = createTheme({});
+    const handleRememberMeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRememberMe(event.target.checked);
+    };
+
+    const defaultTheme = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -77,7 +90,12 @@ function SignIn() {
                         />
                         <PasswordField label="Password" autoComplete="current-password" />
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
+                            control={<Checkbox
+                                value="remember"
+                                color="primary"
+                                checked={rememberMe}
+                                onChange={handleRememberMeChange}
+                            />}
                             label="Remember me"
                         />
                         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

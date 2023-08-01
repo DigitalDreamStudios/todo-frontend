@@ -1,81 +1,130 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
-import TodoForm from '../TodoForm/TodoForm';
 import './TodoList.css';
-import { TodoType, TodoProps } from '../../types/todo.type';
+import { TodoService } from '../../services/Todo.service';
+import { Todo } from '../../models/Todo.type';
+import { getSessionStorageTodos } from '../../helpers/Storage.helper';
+import { useSession } from '../../context/SessionContext';
+import EditModal from '../EditModal/EditModal';
 
-const TodoList: React.FC<TodoProps> = ({ todos, completeTodo, removeTodo, editTodo }) => {
-    const [edit, setEdit] = useState<TodoType>({
-        _id: '',
-        description: '',
-        status: false,
-    });
+const TodoList = (props: { token: string | null }) => {
+  // List states
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  // Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedTodo, setEditedTodo] = useState<Todo | null>(null);
+  // Context
+  const session = useSession();
+  // Service
+  const todoService = new TodoService();
 
-    const handleEditSubmit = async (todo: TodoType) => {
-        // Clear the edit state after submitting the edited todo
-        setEdit({
-            _id: '',
-            description: '',
-            status: false,
-        });
-    };
+  useEffect(() => {
+    if (props.token) fetchTodos();
+  }, [props.token]);
 
-    const handleEditCancel = () => {
-        // Clear the edit state when the user cancels editing
-        setEdit({
-            _id: '',
-            description: '',
-            status: false,
-        });
-    };
+  useEffect(() => {
+    // Update todos from sessionStorage
+    setTodos(getSessionStorageTodos());
+  }, [session.todos]);
 
-    return (
-        <div className="todo-list">
-            {todos?.map((todo) => (
-                <div className={`todo-row ${todo.status ? 'complete' : ''}`} key={todo._id}>
-                    {edit._id === todo._id ? (
-                        // Render the TodoForm for editing
-                        <TodoForm
-                            edit={todo}
-                            onSubmit={handleEditSubmit}
-                            onCancel={handleEditCancel}
-                            onEdit={editTodo}
-                            buttonDescription="Save"
-                        />
-                    ) : (
-                        // Render the todo item with icons for complete, edit, and delete
-                        <>
-                            <div onClick={() => completeTodo && completeTodo(todo._id)}>
-                                {todo.description}
-                            </div>
-                            <div className="icons">
-                                <AiOutlineCheckCircle
-                                    onClick={() => completeTodo && completeTodo(todo._id)}
-                                    className=""
-                                />
-                                <TiEdit
-                                    onClick={() =>
-                                        setEdit({
-                                            _id: todo._id,
-                                            description: todo.description,
-                                            status: todo.status,
-                                        })
-                                    }
-                                    className="edit-icon"
-                                />
-                                <RiCloseCircleLine
-                                    onClick={() => removeTodo && removeTodo(todo._id)}
-                                    className="delete-icon"
-                                />
-                            </div>
-                        </>
-                    )}
-                </div>
-            ))}
-        </div>
-    );
+  const fetchTodos = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const fetchedTodos = await todoService.getTodo(props.token);
+      setTodos(fetchedTodos); // Update the todos state with the fetched todos
+    } catch (error) {
+      setError('Failed to fetch todos.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCompleteTodo = async (todoId: string) => {
+    try {
+      setError(null);
+      if (await todoService.completeTodo(props.token, todoId)) session.updateTodos();
+    } catch (error) {
+      setError('Failed to complete the todo.');
+    }
+  };
+
+  const handleEditTodo = async (editedTodo: Todo) => {
+    try {
+      setError(null);
+      setEditedTodo(editedTodo);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Failed to update the todo.', error);
+    }
+  };
+
+  const handleModalSave = async (updatedTodo: Todo) => {
+    try {
+      setError(null);
+      if (updatedTodo) {
+        if (await todoService.editTodo(props.token, updatedTodo)) {
+          session.updateTodos();
+          setIsModalOpen(false);
+        }
+      }
+    } catch (error) {
+      setError('Failed to update the todo.');
+    }
+  };
+
+  const handleRemoveTodo = async (todoId: string) => {
+    try {
+      setError(null);
+      if (await todoService.removeTodo(props.token, todoId)) session.updateTodos();
+    } catch (error) {
+      setError('Failed to remove the todo.');
+    }
+  };
+
+  return (
+    <div className="todo-list">
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>{error}</div>
+      ) : todos.length === 0 ? ( // Check if there are no todos to display
+        <div>No todos to fetch.</div>
+      ) : (
+        todos.map((todo) => (
+          <div className={`todo-row ${todo.completed ? 'complete' : ''}`} key={todo.id}>
+            <div onClick={() => handleCompleteTodo && handleCompleteTodo(todo.id)}>
+              {todo.title}
+            </div>
+            <div className="icons">
+              <TiEdit onClick={() => handleEditTodo && handleEditTodo(todo)} className="edit-icon" />
+              <AiOutlineCheckCircle
+                onClick={() => handleCompleteTodo && handleCompleteTodo(todo.id)}
+                className="complete-icon"
+              />
+              <RiCloseCircleLine
+                onClick={() => handleRemoveTodo && handleRemoveTodo(todo.id)}
+                className="delete-icon"
+              />
+            </div>
+          </div>
+        ))
+      )}
+      {isModalOpen && (
+        <EditModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          editedTodo={editedTodo}
+          onModalSave={handleModalSave}
+        />
+      )}
+    </div>
+  );
+
 };
 
 export default TodoList;
