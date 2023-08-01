@@ -16,7 +16,7 @@ import SignInService from './services/SignIn.service';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../context/AuthContext';
-import PasswordField from '../../components/PasswordField';
+import PasswordField from '../../components/PasswordField/PasswordField';
 import { TextField } from '@mui/material';
 
 function SignIn() {

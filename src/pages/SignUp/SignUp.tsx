@@ -14,7 +14,7 @@ import { RegisterRequest } from './models/RegisterRequest.interface';
 import SignUpService from './services/SignUp.service';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import PasswordField from '../../components/PasswordField';
+import PasswordField from '../../components/PasswordField/PasswordField';
 import { TextField } from '@mui/material';
 import zxcvbn from 'zxcvbn';
 
