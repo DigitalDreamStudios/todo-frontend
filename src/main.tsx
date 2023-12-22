@@ -6,7 +6,7 @@ import { AuthProvider } from './context/AuthContext'
 import { BrowserRouter } from 'react-router-dom'
 import { UserProvider } from './context/UserContext'
 
-axios.defaults.baseURL = import.meta.env.VITE_API || 'http://localhost:3000'
+axios.defaults.baseURL = import.meta.env.VITE_API || 'https://todo-api.cabrera-dev.com/api'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

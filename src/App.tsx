@@ -1,31 +1,15 @@
-import TodoContainer from './pages/Todo/components/TodoContainer/TodoContainer'
+import Todo from './pages/Todo/Todo'
 import './App.css'
-import NavBar from './components/NavBar/Guest/NavBar'
-import NavBarLogged from './components/NavBar/Logged/NavBar';
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { useAuth } from './context/AuthContext';
+import { Route, Routes } from 'react-router-dom'
 import NotFound from './pages/NotFound/NotFound';
-import SignIn from './pages/SignIn/SignIn';
-import SignUp from './pages/SignUp/SignUp';
-import Footer from './components/Footer/Footer';
 
 function App() {
-  // Context hook
-  const auth = useAuth();
-
   return (
     <div className="App">
-      {auth.token ? <NavBarLogged /> : <NavBar />}
       <Routes>
-        <Route index element={<TodoContainer />} />
-        <Route path="/" element={auth.token ? <TodoContainer /> : <Navigate to="/login" />} />
-        {/* If the user has a token, redirect to Dashboard; otherwise, show SignIn */}
-        <Route path="login" element={auth.token ? <Navigate to="/" /> : <SignIn />} />
-        {/* If the user has a token, redirect to Dashboard; otherwise, show SignUp */}
-        <Route path="register" element={auth.token ? <Navigate to="/" /> : <SignUp />} />
+        <Route index element={<Todo />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
     </div>
   )
 }

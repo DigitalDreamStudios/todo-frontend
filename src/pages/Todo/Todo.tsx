@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import TodoForm from '../TodoForm/TodoForm';
-import './TodoContainer.css';
+import TodoForm from './components/TodoForm/TodoForm';
+import './Todo.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAuth } from '../../../../context/AuthContext';
-import { useUser } from '../../../../context/UserContext';
-import TodoList from '../TodoList/TodoList';
-import { SessionProvider } from '../../context/SessionContext';
+import { useAuth } from '../../context/AuthContext';
+import { useUser } from '../../context/UserContext';
+import TodoList from './components/TodoList/TodoList';
+import { SessionProvider } from './context/SessionContext';
 
-const TodoContainer: React.FC<{}> = () => {
+const Todo: React.FC<{}> = () => {
   // Container states
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
@@ -35,4 +35,4 @@ const TodoContainer: React.FC<{}> = () => {
   );
 };
 
-export default TodoContainer;
+export default Todo;
